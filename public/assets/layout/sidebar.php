@@ -1,0 +1,352 @@
+<aside id="sidebar"
+       class="fixed top-0 left-0 
+              w-64 h-screen 
+              bg-gradient-to-b from-white to-gray-50
+              border-r border-gray-200
+              flex flex-col justify-between
+              z-50 transition-all duration-300 ease-in-out
+              overflow-visible
+              hidden md:flex">
+        <!-- TOP AREA -->
+        <div>
+            <!-- Logo Area -->
+            <div class="px-4 py-6 flex flex-col items-center">
+                <!-- Logo -->
+                <div class="w-16 h-16 
+                            bg-gradient-to-br from-blue-500 to-purple-500 
+                            rounded-xl 
+                            flex items-center justify-center
+                            transition-all duration-300
+                            hover:scale-105">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+                    </svg>
+                </div>
+                
+                <!-- Text Title -->
+                <h1 class="mt-3 text-xl font-bold text-gray-800">
+                    STUDY<span class="text-purple-600">YOU</span>
+                </h1>
+                
+                <!-- Status dots -->
+                <div class="mt-2 flex gap-1">
+                    <div class="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
+                    <div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
+                    <div class="w-1.5 h-1.5 bg-purple-400 rounded-full"></div>
+                </div>
+            </div>
+
+            <!-- Navigation Menu - Always visible on desktop -->
+            <nav class="mt-4 space-y-1 px-3">
+                <!-- Dashboard -->
+                <a href="/frontend/user/dashboardUser.php" 
+                   class="flex items-center gap-3 
+                          p-3 rounded-lg
+                          text-gray-600 hover:text-gray-900
+                          hover:bg-gradient-to-r hover:from-gray-50 hover:to-white
+                          hover:shadow-sm
+                          transition-all duration-200
+                          group/nav relative">
+                    <span class="flex-shrink-0">
+                        <svg class="w-6 h-6 text-gray-500 group-hover/nav:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                        </svg>
+                    </span>
+                    <span class="text-base font-medium">
+                        Dashboard
+                    </span>
+                    <div class="absolute right-3 w-1.5 h-1.5 bg-blue-500 rounded-full opacity-0 group-hover/nav:opacity-100 transition-opacity"></div>
+                </a>
+                
+                <!-- Schedule (Active) -->
+                <a href="/frontend/user/schedule/listJadwal.php" 
+                   class="flex items-center gap-3 
+                          p-3 rounded-lg
+                          text-gray-600 hover:text-purple-600
+                          hover:bg-gradient-to-r hover:from-purple-50 hover:to-white
+                          hover:shadow-sm
+                          transition-all duration-200
+                          group/nav relative">
+                    <span class="flex-shrink-0">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </span>
+                    <span class="text-base font-semibold">
+                        Schedule
+                    </span>
+                </a>
+                
+                <!-- Course -->
+                <a href="/frontend/user/materi/listMateri.php" 
+                   class="flex items-center gap-3 
+                          p-3 rounded-lg
+                          text-gray-600 hover:text-purple-600
+                          hover:bg-gradient-to-r hover:from-purple-50 hover:to-white
+                          hover:shadow-sm
+                          transition-all duration-200
+                          group/nav relative">
+                    <span class="flex-shrink-0">
+                        <svg class="w-6 h-6 text-gray-500 group-hover/nav:text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </span>
+                    <span class="text-base font-medium">
+                        Course
+                    </span>
+                </a>
+
+                
+                <!-- Notes -->
+                <a href="/frontend/user/catatan/lihatCatatan.php" 
+                   class="flex items-center gap-3 
+                          p-3 rounded-lg
+                          text-gray-600 hover:text-pink-600
+                          hover:bg-gradient-to-r hover:from-pink-50 hover:to-white
+                          hover:shadow-sm
+                          transition-all duration-200
+                          group/nav relative">
+                    <span class="flex-shrink-0">
+                        <svg class="w-6 h-6 text-gray-500 group-hover/nav:text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                    </span>
+                    <span class="text-base font-medium">
+                        Notes
+                    </span>
+                </a>
+                
+                <!-- Account -->
+                <a href="/frontend/user/akunuser/lihatakun.php" 
+                   class="flex items-center gap-3 
+                          p-3 rounded-lg
+                          text-gray-600 hover:text-indigo-600
+                          hover:bg-gradient-to-r hover:from-indigo-50 hover:to-white
+                          hover:shadow-sm
+                          transition-all duration-200
+                          group/nav relative">
+                    <span class="flex-shrink-0">
+                        <svg class="w-6 h-6 text-gray-500 group-hover/nav:text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                    </span>
+                    <span class="text-base font-medium">
+                        Account
+                    </span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- BOTTOM AREA -->
+        <div class="p-3 border-t border-gray-200">            
+            <!-- Logout Button -->
+            <a href="/frontend/logout.php"
+               class="flex items-center justify-center md:justify-start gap-2 
+                      px-3 py-2 
+                      rounded-lg
+                      bg-gradient-to-r from-rose-50 to-pink-50
+                      border border-rose-200
+                      hover:from-rose-100 hover:to-pink-100
+                      hover:border-rose-300
+                      text-rose-600 hover:text-rose-700
+                      font-medium text-sm
+                      transition-all duration-200
+                      group/logout">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                </svg>
+                <span class="text-sm">
+                    Logout
+                </span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Mobile Toggle Button -->
+    <button id="mobileSidebarToggle" 
+            class="fixed top-4 left-4 z-40 
+                   w-10 h-10 
+                   bg-white
+                   border border-gray-300
+                   rounded-lg
+                   shadow-sm
+                   flex items-center justify-center
+                   transition-all duration-300
+                   hover:bg-gray-50 hover:shadow-md
+                   active:scale-95
+                   md:hidden">
+        <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
+
+    <!-- Mobile Overlay -->
+    <div id="mobileSidebarOverlay" 
+         class="fixed inset-0 bg-black/30 z-30 
+                opacity-0 invisible
+                transition-all duration-300 ease-in-out
+                md:hidden"></div>
+
+    <!-- Mobile Sidebar - Full Version langsung -->
+    <aside id="mobileSidebar"
+           class="fixed top-0 left-0 
+                  w-64 h-screen 
+                  bg-white
+                  border-r border-gray-200
+                  flex flex-col justify-between
+                  z-40
+                  transform -translate-x-full
+                  transition-transform duration-300 ease-in-out
+                  md:hidden shadow-xl">
+        
+        <!-- Mobile Header -->
+        <div>
+            <div class="px-4 py-6 flex items-center gap-3 border-b border-gray-200">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-gray-800">STUDY<span class="text-purple-600">YOU</span></h1>
+                    <p class="text-xs text-gray-500">Learning Platform</p>
+                </div>
+                <button id="closeMobileSidebar" class="ml-auto p-2 rounded-lg hover:bg-gray-100">
+                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Navigation -->
+            <nav class="mt-4 space-y-1 px-3">
+                <a href="/frontend/user/dashboardUser.php" 
+                   class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors">
+                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                    </svg>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+                
+                <a href="/frontend/user/schedule/listJadwal.php" 
+                   class="flex items-center gap-3 p-3 rounded-lg bg-blue-50 text-blue-600 border-r-2 border-blue-500">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <span class="font-semibold">Schedule</span>
+                    <div class="ml-auto w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                </a>
+                
+                <a href="/frontend/user/materi/listMateri.php" 
+                   class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors">
+                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                    <span class="font-medium">Course</span>
+                </a>
+                
+                <a href="#" 
+                   class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors">
+                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                    </svg>
+                    <span class="font-medium">Tasks</span>
+                </a>
+                
+                <a href="/frontend/user/catatan/lihatCatatan.php" 
+                   class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors">
+                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                    <span class="font-medium">Notes</span>
+                </a>
+                
+                <a href="/frontend/user/akunuser/lihatakun.php" 
+                   class="flex items-center gap-3 p-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors">
+                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    <span class="font-medium">Account</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Mobile Bottom -->
+        <div class="p-4 border-t border-gray-200">
+            <a href="/frontend/logout.php" 
+               class="flex items-center justify-center gap-2 p-3 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 transition-colors font-medium">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                </svg>
+                Logout
+            </a>
+            <div class="mt-3 text-center text-xs text-gray-500">
+                STUDYYOU v2.0 • Student Platform
+            </div>
+        </div>
+    </aside>
+
+<!-- JavaScript yang lebih sederhana -->
+<script>
+    // Mobile sidebar toggle
+    const mobileToggle = document.getElementById('mobileSidebarToggle');
+    const mobileSidebar = document.getElementById('mobileSidebar');
+    const closeMobileSidebar = document.getElementById('closeMobileSidebar');
+    const mobileOverlay = document.getElementById('mobileSidebarOverlay');
+
+    // Toggle mobile sidebar
+    function toggleMobileSidebar() {
+        mobileSidebar.classList.toggle('-translate-x-full');
+        mobileOverlay.classList.toggle('opacity-0');
+        mobileOverlay.classList.toggle('invisible');
+        mobileOverlay.classList.toggle('opacity-100');
+        mobileOverlay.classList.toggle('visible');
+    }
+
+    // Event listeners
+    mobileToggle.addEventListener('click', toggleMobileSidebar);
+    closeMobileSidebar.addEventListener('click', toggleMobileSidebar);
+    mobileOverlay.addEventListener('click', toggleMobileSidebar);
+
+    // Auto-close sidebar when clicking navigation links on mobile
+    const mobileNavLinks = mobileSidebar.querySelectorAll('a');
+    mobileNavLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth < 768) {
+                toggleMobileSidebar();
+            }
+        });
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth >= 768) {
+            // Close mobile sidebar on desktop
+            mobileSidebar.classList.add('-translate-x-full');
+            mobileOverlay.classList.remove('opacity-100', 'visible');
+            mobileOverlay.classList.add('opacity-0', 'invisible');
+        }
+    });
+</script>
+
+<style>
+    @keyframes pulse {
+        0%, 100% { opacity: 0.6; }
+        50% { opacity: 1; }
+    }
+    
+    .animate-pulse {
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+    
+    /* Smooth transitions */
+    #mobileSidebar {
+        transition: transform 0.3s ease-in-out;
+    }
+    
+    #mobileSidebarOverlay {
+        transition: opacity 0.3s ease-in-out;
+    }
+</style>
