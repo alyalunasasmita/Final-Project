@@ -56,11 +56,8 @@ require_once __DIR__ . '/../../assets/layout/sbAdmin.php';
                             <div class="w-3 h-3 rounded-full bg-gradient-to-r from-cyan-400 to-blue-400 mr-2"></div>
                             <span class="text-sm font-medium text-gray-700">
                                 <?php 
-                                if (isset($result['success']) && $result['success'] === true) {
-                                    echo $result['total'] ?? 0;
-                                } else {
-                                    echo 0;
-                                }
+                                $total = is_array($result['data'] ?? null) ? count($result['data']) : 0;
+                                echo $total;
                                 ?> Materi
                             </span>
                         </div>
@@ -242,15 +239,15 @@ require_once __DIR__ . '/../../assets/layout/sbAdmin.php';
                             </a>
                             
                             <!-- Delete Button -->
-                            <a href="hapusMateri.php?id=<?= $id_materi ?>"
+                            <a href="ArchiveMateri.php?id=<?= $id_materi ?>"
                                class="group/delete flex flex-col items-center justify-center p-3 bg-gradient-to-br from-red-50 to-white hover:from-red-100 hover:to-white border border-red-200 hover:border-red-300 rounded-xl shadow-xs hover:shadow-md transition-all duration-200"
-                               onclick="return confirm('Are you sure you want to delete this course? This action cannot be undone.')">
+                               onclick="return confirm('kamu yakin mau arsip materi <?= htmlspecialchars($nama_materi) ?>?.')">
                                 <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-gradient-to-br from-red-100 to-red-50 mb-1.5">
                                     <span class="material-icons text-sm text-red-600">
-                                        delete
+                                        archive
                                     </span>
                                 </div>
-                                <span class="text-xs font-medium text-gray-700 group-hover/delete:text-red-700">Delete</span>
+                                <span class="text-xs font-medium text-gray-700 group-hover/delete:text-red-700">Archive</span>
                             </a>
                             
                             <!-- Submateri Button -->
@@ -273,6 +270,12 @@ require_once __DIR__ . '/../../assets/layout/sbAdmin.php';
             </div>
 
             <!-- Stats Footer -->
+<<<<<<< HEAD
+=======
+             <a href = "materiArsip.php"
+                class="mt-8 inline-block text-sm text-gray-600 hover:text-gray-800 underline">
+                View Archived Courses &rarr;
+>>>>>>> frontend
         
             <?php endif; ?>
 

@@ -74,6 +74,7 @@ require_once __DIR__ . '/../../assets/layout/header.php';
                 <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-cyan-700 to-blue-700 bg-clip-text text-transparent">
                     Edit Course
                 </h1>
+<<<<<<< HEAD
                 <p class="text-gray-600 mt-2 font-light">Update course information and content</p>
             </div>
         </div>
@@ -98,6 +99,12 @@ require_once __DIR__ . '/../../assets/layout/header.php';
                 </div>
             </div>
         </div>
+=======
+            </div>
+        </div>
+        
+        
+>>>>>>> frontend
     </div>
 
     <!-- Form Container -->
@@ -107,11 +114,14 @@ require_once __DIR__ . '/../../assets/layout/header.php';
             <!-- Form Header -->
             <div class="px-6 py-5 border-b border-gray-200/60 bg-gradient-to-r from-cyan-50/30 to-blue-50/30">
                 <div class="flex items-center gap-4">
+<<<<<<< HEAD
                     <div class="p-3 bg-gradient-to-br from-cyan-100 to-blue-100 rounded-xl border border-cyan-200 shadow-sm">
                         <span class="material-icons text-xl text-cyan-600">
                             edit_note
                         </span>
                     </div>
+=======
+>>>>>>> frontend
                     <div>
                         <h2 class="text-xl font-semibold text-gray-800">Edit Course Information</h2>
                         <p class="text-sm text-gray-600 mt-1 font-light">Update the course details below</p>
@@ -154,8 +164,12 @@ require_once __DIR__ . '/../../assets/layout/header.php';
                                         required
                                         class="form-input w-full pl-12 pr-4 py-3.5 border border-gray-300 rounded-xl focus:border-cyan-400 focus:ring-2 focus:ring-cyan-200/50 transition-all duration-300 bg-white/50"
                                         autofocus
+<<<<<<< HEAD
                                         placeholder="Enter course title"
                                     >
+=======
+                                        placeholder="Enter course title">
+>>>>>>> frontend
                                 </div>
                                 <p class="mt-2 text-sm text-gray-500 flex items-center gap-2">
                                     <span class="material-icons text-xs text-cyan-500">
@@ -164,8 +178,11 @@ require_once __DIR__ . '/../../assets/layout/header.php';
                                     Update the course title as needed
                                 </p>
                             </div>
+<<<<<<< HEAD
 
                             <!-- Course Description Field -->
+=======
+>>>>>>> frontend
                             <div class="group">
                                 <div class="flex items-center justify-between mb-3">
                                     <label for="deskripsi" class="block text-sm font-medium text-gray-700">
@@ -196,12 +213,15 @@ require_once __DIR__ . '/../../assets/layout/header.php';
                                 </div>
                                 <div class="mt-3">
                                     <div class="flex items-center justify-between text-sm">
+<<<<<<< HEAD
                                         <p class="text-gray-500 flex items-center gap-2">
                                             <span class="material-icons text-xs text-cyan-500">
                                                 lightbulb
                                             </span>
                                             Update the learning objectives and description
                                         </p>
+=======
+>>>>>>> frontend
                                         <div class="flex items-center gap-2">
                                             <div class="w-24 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                                                 <div id="progressBar" class="h-full bg-gradient-to-r from-cyan-400 to-blue-400 transition-all duration-300" 
@@ -214,6 +234,7 @@ require_once __DIR__ . '/../../assets/layout/header.php';
                             </div>
                         </div>
                     </div>
+<<<<<<< HEAD
 
                     
 
@@ -254,6 +275,8 @@ require_once __DIR__ . '/../../assets/layout/header.php';
                     </div>
 
                     <!-- Action Buttons -->
+=======
+>>>>>>> frontend
                     <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 border-t border-gray-200/60">
                         
                         
@@ -280,6 +303,7 @@ require_once __DIR__ . '/../../assets/layout/header.php';
                             </button>
                         </div>
                     </div>
+<<<<<<< HEAD
 
                 </form>
             </div>
@@ -291,6 +315,11 @@ require_once __DIR__ . '/../../assets/layout/header.php';
             
             
             
+=======
+                </form>
+            </div>
+        </div>            
+>>>>>>> frontend
             </div>
         </div>
     </div>
