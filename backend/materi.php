@@ -2,10 +2,8 @@
 namespace App\Materi;
 
 require_once __DIR__ . '/../config/nyambung.php';
-require_once __DIR__ . '/../api/apiyoutube.php';
 
 use App\Database\Database;
-use App\YouTube\ApiYouTube;
 
 class Materi
 {
@@ -14,276 +12,168 @@ class Materi
     public function __construct()
     {
         $conn = new Database();
-        $this->db = $conn->db; // kamu memang pakai $conn->db di Database
+        $this->db = $conn->db;
     }
 
     /**
-     * Normalize input YouTube:
-     * - kalau kosong -> null
-     * - kalau URL -> extract jadi ID + type (video/playlist)
-     * - kalau sudah ID -> biarkan
+     * CREATE - Tambah materi
      */
-    private function normalizeYouTube(?string $input, string $playlist_type_default = 'video'): array
+    public function tambahMateri(string $nama, ?string $deskripsi = null): array
     {
-        $input = trim((string)$input);
+        try {
+            $stmt = $this->db->prepare("
+                INSERT INTO materi (nama_materi, deskripsi_materi)
+                VALUES (?, ?)
+            ");
+            if (!$stmt) {
+                throw new \Exception($this->db->error);
+            }
 
-        if ($input === '') {
+            $stmt->bind_param("ss", $nama, $deskripsi);
+            $stmt->execute();
+
             return [
-                'playlist_id' => null,
-                'playlist_type' => $playlist_type_default,
+                'success' => true,
+                'id' => $this->db->insert_id,
+                'message' => 'Materi berhasil ditambahkan'
             ];
+
+        } catch (\Exception $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * READ - Materi aktif (untuk user)
+     */
+    public function lihatMateri(): array
+    {
+        $sql = "
+            SELECT id_materi, nama_materi, deskripsi_materi
+            FROM materi
+            WHERE deleted_at IS NULL
+            ORDER BY id_materi DESC
+        ";
+
+        $res = $this->db->query($sql);
+        $data = [];
+
+        while ($row = $res->fetch_assoc()) {
+            $data[] = $row;
         }
 
-        // sudah berupa ID (bukan URL)
-        if (!str_contains($input, 'http') && !str_contains($input, 'youtu')) {
-            return [
-                'playlist_id' => $input,
-                'playlist_type' => $playlist_type_default,
-            ];
+        return ['success' => true, 'data' => $data];
+    }
+
+    /**
+     * READ - Materi by ID (aktif saja)
+     */
+    public function getMateriById(int $id): array
+    {
+        $stmt = $this->db->prepare("
+            SELECT id_materi, nama_materi, deskripsi_materi
+            FROM materi
+            WHERE id_materi = ?
+              AND deleted_at IS NULL
+        ");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+
+        $res = $stmt->get_result();
+        if ($res->num_rows === 0) {
+            return ['success' => false, 'message' => 'Materi tidak ditemukan'];
         }
 
-        // URL -> extract
-        $yt = new ApiYouTube();
-        $info = $yt->extractYouTubeData($input);
+        return ['success' => true, 'data' => $res->fetch_assoc()];
+    }
 
-        if (!$info || !isset($info['id'], $info['type'])) {
-            throw new \Exception("Link YouTube tidak valid");
-        }
+    /**
+     * UPDATE - Update materi (aktif saja)
+     */
+    public function updateMateri(int $id, string $nama, ?string $deskripsi = null): array
+    {
+        $stmt = $this->db->prepare("
+            UPDATE materi
+            SET nama_materi = ?, deskripsi_materi = ?
+            WHERE id_materi = ?
+              AND deleted_at IS NULL
+        ");
+        $stmt->bind_param("ssi", $nama, $deskripsi, $id);
+        $stmt->execute();
 
         return [
-            'playlist_id' => $info['id'],     // ✅ ID doang
-            'playlist_type' => $info['type'], // ✅ video / playlist
+            'success' => true,
+            'affected_rows' => $stmt->affected_rows
         ];
     }
 
     /**
-     * CREATE - Tambah materi baru
-     * NOTE: parameter ke-3 bisa URL atau ID. Akan dinormalize otomatis.
+     * DELETE - SOFT DELETE (materi)
+     * Submateri otomatis ikut via TRIGGER
      */
-    public function tambahMateri(
-        string $nama,
-        ?string $deskripsi = null,
-        ?string $playlist_id = null,
-        string $playlist_type = 'video'
-    ): array {
-        try {
-            // ✅ normalize youtube URL/ID
-            $ytNorm = $this->normalizeYouTube($playlist_id, $playlist_type);
-            $playlist_id = $ytNorm['playlist_id'];
-            $playlist_type = $ytNorm['playlist_type'];
+    public function archiveMateri(int $id): array
+    {
+        $stmt = $this->db->prepare("
+            UPDATE materi
+            SET deleted_at = NOW()
+            WHERE id_materi = ?
+              AND deleted_at IS NULL
+        ");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
 
-            $stmt = $this->db->prepare("
-                INSERT INTO materi (nama_materi, deskripsi_materi, playlist_id, playlist_type)
-                VALUES (?, ?, ?, ?)
-            ");
-
-            $stmt->bind_param("ssss", $nama, $deskripsi, $playlist_id, $playlist_type);
-
-            if ($stmt->execute()) {
-                $id = $this->db->insert_id;
-                return [
-                    'success' => true,
-                    'id' => $id,
-                    'message' => 'Materi berhasil ditambahkan',
-                    'data' => [
-                        'id_materi' => $id,
-                        'nama_materi' => $nama,
-                        'deskripsi_materi' => $deskripsi,
-                        'playlist_id' => $playlist_id,
-                        'playlist_type' => $playlist_type
-                    ]
-                ];
-            }
-
-            throw new \Exception("Gagal menambahkan materi: " . $stmt->error);
-
-        } catch (\Exception $e) {
-            return [
-                'success' => false,
-                'message' => $e->getMessage(),
-            ];
-        }
+        return [
+            'success' => true,
+            'affected_rows' => $stmt->affected_rows,
+            'message' => $stmt->affected_rows > 0
+                ? 'Materi & submateri berhasil diarsipkan'
+                : 'Materi tidak ditemukan / sudah diarsipkan'
+        ];
     }
 
     /**
-     * READ - Lihat semua materi
+     * RESTORE - Balikin materi + submateri
      */
-    public function lihatMateri(): array
+    public function restoreMateri(int $id): array
     {
-        try {
-            $query = "
-                SELECT 
-                    id_materi, 
-                    nama_materi, 
-                    deskripsi_materi, 
-                    playlist_id,
-                    playlist_type
-                FROM materi
-                ORDER BY id_materi DESC
-            ";
+        $stmt = $this->db->prepare("
+            UPDATE materi
+            SET deleted_at = NULL
+            WHERE id_materi = ?
+        ");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
 
-            $result = $this->db->query($query);
-
-            if (!$result) {
-                return [
-                    'success' => false,
-                    'message' => 'Query error: ' . $this->db->error,
-                    'data' => []
-                ];
-            }
-
-            $data = [];
-            while ($row = $result->fetch_assoc()) {
-                $data[] = $row;
-            }
-
-            return [
-                'success' => true,
-                'data' => $data,
-                'total' => count($data)
-            ];
-
-        } catch (\Exception $e) {
-            return [
-                'success' => false,
-                'message' => $e->getMessage(),
-                'data' => []
-            ];
-        }
+        return [
+            'success' => true,
+            'message' => 'Materi berhasil direstore'
+        ];
     }
 
-    /**
-     * READ - Dapatkan materi berdasarkan ID
-     */
-    public function getMateriById(int $id): array
+    public function lihatMateriArsip(): array
     {
-        try {
-            $stmt = $this->db->prepare("
-                SELECT 
-                    id_materi, 
-                    nama_materi, 
-                    deskripsi_materi, 
-                    playlist_id,
-                    playlist_type
-                FROM materi 
-                WHERE id_materi = ?
-            ");
+        $sql = "
+            SELECT id_materi, nama_materi, deskripsi_materi, deleted_at
+            FROM materi
+            WHERE deleted_at IS NOT NULL
+            ORDER BY deleted_at DESC
+        ";
+        $res = $this->db->query($sql);
+        $data = [];
+        while ($row = $res->fetch_assoc()) $data[] = $row;
 
-            $stmt->bind_param("i", $id);
-            $stmt->execute();
-
-            $result = $stmt->get_result();
-
-            if ($result->num_rows === 0) {
-                return [
-                    'success' => false,
-                    'message' => 'Materi tidak ditemukan'
-                ];
-            }
-
-            return [
-                'success' => true,
-                'data' => $result->fetch_assoc()
-            ];
-
-        } catch (\Exception $e) {
-            return [
-                'success' => false,
-                'message' => $e->getMessage()
-            ];
-        }
+        return ['success' => true, 'data' => $data];
     }
 
-    /**
-     * UPDATE - Update materi
-     * NOTE: parameter playlist_id bisa URL atau ID. Akan dinormalize otomatis.
-     */
-    public function updateMateri(
-        int $id,
-        string $nama,
-        ?string $deskripsi = null,
-        ?string $playlist_id = null,
-        string $playlist_type = 'video'
-    ): array {
-        try {
-            $check = $this->getMateriById($id);
-            if (!$check['success']) return $check;
-
-            // ✅ normalize youtube URL/ID
-            $ytNorm = $this->normalizeYouTube($playlist_id, $playlist_type);
-            $playlist_id = $ytNorm['playlist_id'];
-            $playlist_type = $ytNorm['playlist_type'];
-
-            $stmt = $this->db->prepare("
-                UPDATE materi 
-                SET 
-                    nama_materi = ?, 
-                    deskripsi_materi = ?, 
-                    playlist_id = ?,
-                    playlist_type = ?
-                WHERE id_materi = ?
-            ");
-
-            $stmt->bind_param("ssssi", $nama, $deskripsi, $playlist_id, $playlist_type, $id);
-
-            if ($stmt->execute()) {
-                $affectedRows = $stmt->affected_rows;
-
-                return [
-                    'success' => true,
-                    'affected_rows' => $affectedRows,
-                    'message' => $affectedRows > 0 ? 'Materi berhasil diupdate' : 'Tidak ada perubahan',
-                    'data' => [
-                        'id_materi' => $id,
-                        'nama_materi' => $nama,
-                        'deskripsi_materi' => $deskripsi,
-                        'playlist_id' => $playlist_id,
-                        'playlist_type' => $playlist_type
-                    ]
-                ];
-            }
-
-            throw new \Exception("Gagal mengupdate materi: " . $stmt->error);
-
-        } catch (\Exception $e) {
-            return [
-                'success' => false,
-                'message' => $e->getMessage(),
-            ];
-        }
-    }
-
-    /**
-     * DELETE - Hapus materi
-     */
-    public function deleteMateri(int $id): array
+    public function deleteHardMateri(int $id): bool
     {
-        try {
-            $stmt = $this->db->prepare("DELETE FROM materi WHERE id_materi = ?");
-            $stmt->bind_param("i", $id);
-
-            if ($stmt->execute()) {
-                $affectedRows = $stmt->affected_rows;
-
-                return [
-                    'success' => true,
-                    'affected_rows' => $affectedRows,
-                    'message' => $affectedRows > 0 ? 'Materi berhasil dihapus' : 'Materi tidak ditemukan'
-                ];
-            }
-
-            throw new \Exception("Gagal menghapus materi: " . $stmt->error);
-
-        } catch (\Exception $e) {
-            return [
-                'success' => false,
-                'message' => $e->getMessage(),
-            ];
-        }
+        $stmt = $this->db->prepare("
+            DELETE FROM materi
+            WHERE id_materi = ?
+            AND deleted_at IS NOT NULL
+        ");
+        $stmt->bind_param("i", $id);
+        return $stmt->execute();
     }
 
-    public function getLastInsertId(): int
-    {
-        return $this->db->insert_id;
-    }
 }

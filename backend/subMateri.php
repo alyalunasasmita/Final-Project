@@ -1,111 +1,200 @@
 <?php
-namespace App\submateri;
+namespace App\Submateri;
 
-require_once __DIR__.'/../config/nyambung.php'; 
+require_once __DIR__ . '/../config/nyambung.php';
 use App\Database\Database;
 
-class Submateri {
-
+class Submateri
+{
     private $db;
 
-    public function __construct() {
-
+    public function __construct()
+    {
         $conn = new Database();
         $this->db = $conn->db;
     }
 
-    public function tambahSubmateri($urutan,$nama, $isi, $id_materi) {
+    public function tambahSubmateri(int $urutan, string $nama, string $isi, int $id_materi): bool
+    {
         $stmt = $this->db->prepare(
             "INSERT INTO submateri (urutan, nama_subMateri, isi_materi, materi_id_materi)
              VALUES (?, ?, ?, ?)"
         );
         $stmt->bind_param("issi", $urutan, $nama, $isi, $id_materi);
-        return $stmt->execute();
+        $ok = $stmt->execute();
+        $stmt->close();
+        return $ok;
     }
 
-    public function lihatSubmateriByMateri($id_materi) {
+    /**
+     * Lihat submateri by materi (aktif saja + materi aktif)
+     */
+    public function lihatSubmateriByMateri(int $id_materi): array
+    {
         $stmt = $this->db->prepare(
-            "SELECT * FROM submateri WHERE materi_id_materi = ? ORDER BY id_subMateri ASC"
+            "SELECT s.*
+             FROM submateri s
+             JOIN materi m ON m.id_materi = s.materi_id_materi
+             WHERE s.materi_id_materi = ?
+               AND s.deleted_at IS NULL
+               AND m.deleted_at IS NULL
+             ORDER BY s.urutan ASC, s.id_subMateri ASC"
         );
         $stmt->bind_param("i", $id_materi);
         $stmt->execute();
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $rows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        return $rows;
     }
 
-    public function lihatSubmateriById($id) {
-    $stmt = $this->db->prepare(
-        "SELECT * FROM submateri WHERE id_subMateri = ? LIMIT 1"
-    );
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    return $stmt->get_result()->fetch_assoc();
-}
-
-
-    public function updateSubmateri($id, $nama, $isi, $materi) {
+    /**
+     * Lihat submateri by id (aktif saja + materi aktif)
+     */
+    public function lihatSubmateriById(int $id): ?array
+    {
         $stmt = $this->db->prepare(
-            "UPDATE submateri 
-            SET nama_subMateri=?, isi_materi=?, materi_id_materi=?
-            WHERE id_subMateri=?"
+            "SELECT s.*
+             FROM submateri s
+             JOIN materi m ON m.id_materi = s.materi_id_materi
+             WHERE s.id_subMateri = ?
+               AND s.deleted_at IS NULL
+               AND m.deleted_at IS NULL
+             LIMIT 1"
+        );
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return $row ?: null;
+    }
+
+    public function updateSubmateri(int $id, string $nama, string $isi, int $materi): bool
+    {
+        $stmt = $this->db->prepare(
+            "UPDATE submateri
+             SET nama_subMateri = ?, isi_materi = ?, materi_id_materi = ?
+             WHERE id_subMateri = ?
+               AND deleted_at IS NULL"
         );
         $stmt->bind_param("ssii", $nama, $isi, $materi, $id);
-        return $stmt->execute();
+        $ok = $stmt->execute();
+        $stmt->close();
+        return $ok;
     }
 
-    public function deleteSubmateri($id) {
-        $stmt = $this->db->prepare("DELETE FROM submateri WHERE id_subMateri=?");
+    /**
+     * SOFT DELETE submateri (bukan delete permanen)
+     */
+    public function deleteSubmateri(int $id): bool
+    {
+        $stmt = $this->db->prepare(
+            "UPDATE submateri
+             SET deleted_at = NOW()
+             WHERE id_subMateri = ?
+               AND deleted_at IS NULL"
+        );
         $stmt->bind_param("i", $id);
-        return $stmt->execute();
+        $ok = $stmt->execute();
+        $stmt->close();
+        return $ok;
     }
 
-    // navigasi bagian sumbateri_detail
+    // =========================
+    // Navigasi submateri_detail
+    // =========================
 
-    public function getNextSubmateri($current_id, $materi_id) {
-        $stmt = $this->db->prepare("
-            SELECT * FROM submateri 
-            WHERE materi_id_materi = ? 
-            AND (urutan > (SELECT urutan FROM submateri WHERE id_subMateri = ?) 
-                 OR (urutan = (SELECT urutan FROM submateri WHERE id_subMateri = ?) 
-                     AND id_subMateri > ?))
-            ORDER BY urutan ASC, id_subMateri ASC 
-            LIMIT 1
-        ");
-        
-        $stmt->bind_param("iiii", $materi_id, $current_id, $current_id, $current_id);
+    private function getUrutanById(int $id): ?int
+    {
+        $stmt = $this->db->prepare(
+            "SELECT urutan
+             FROM submateri
+             WHERE id_subMateri = ?
+               AND deleted_at IS NULL
+             LIMIT 1"
+        );
+        $stmt->bind_param("i", $id);
         $stmt->execute();
-        return $stmt->get_result()->fetch_assoc();
+        $row = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return $row ? (int)$row['urutan'] : null;
     }
 
-    public function getPreviousSubmateri($current_id, $materi_id) {
+    public function getNextSubmateri(int $current_id, int $materi_id): ?array
+    {
+        $currentUrutan = $this->getUrutanById($current_id);
+        if ($currentUrutan === null) return null;
+
         $stmt = $this->db->prepare("
-            SELECT * FROM submateri 
-            WHERE materi_id_materi = ? 
-            AND (urutan < (SELECT urutan FROM submateri WHERE id_subMateri = ?) 
-                 OR (urutan = (SELECT urutan FROM submateri WHERE id_subMateri = ?) 
-                     AND id_subMateri < ?))
-            ORDER BY urutan DESC, id_subMateri DESC 
+            SELECT s.*
+            FROM submateri s
+            JOIN materi m ON m.id_materi = s.materi_id_materi
+            WHERE s.materi_id_materi = ?
+              AND s.deleted_at IS NULL
+              AND m.deleted_at IS NULL
+              AND (
+                    s.urutan > ?
+                 OR (s.urutan = ? AND s.id_subMateri > ?)
+              )
+            ORDER BY s.urutan ASC, s.id_subMateri ASC
             LIMIT 1
         ");
-        
-        $stmt->bind_param("iiii", $materi_id, $current_id, $current_id, $current_id);
+
+        $stmt->bind_param("iiii", $materi_id, $currentUrutan, $currentUrutan, $current_id);
         $stmt->execute();
-        return $stmt->get_result()->fetch_assoc();
+        $row = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return $row ?: null;
     }
 
-    public function getFirstSubmateri($materi_id) {
+    public function getPreviousSubmateri(int $current_id, int $materi_id): ?array
+    {
+        $currentUrutan = $this->getUrutanById($current_id);
+        if ($currentUrutan === null) return null;
+
         $stmt = $this->db->prepare("
-            SELECT * FROM submateri 
-            WHERE materi_id_materi = ? 
-            ORDER BY urutan ASC, id_subMateri ASC 
+            SELECT s.*
+            FROM submateri s
+            JOIN materi m ON m.id_materi = s.materi_id_materi
+            WHERE s.materi_id_materi = ?
+              AND s.deleted_at IS NULL
+              AND m.deleted_at IS NULL
+              AND (
+                    s.urutan < ?
+                 OR (s.urutan = ? AND s.id_subMateri < ?)
+              )
+            ORDER BY s.urutan DESC, s.id_subMateri DESC
             LIMIT 1
         ");
-        
+
+        $stmt->bind_param("iiii", $materi_id, $currentUrutan, $currentUrutan, $current_id);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return $row ?: null;
+    }
+
+    public function getFirstSubmateri(int $materi_id): ?array
+    {
+        $stmt = $this->db->prepare("
+            SELECT s.*
+            FROM submateri s
+            JOIN materi m ON m.id_materi = s.materi_id_materi
+            WHERE s.materi_id_materi = ?
+              AND s.deleted_at IS NULL
+              AND m.deleted_at IS NULL
+            ORDER BY s.urutan ASC, s.id_subMateri ASC
+            LIMIT 1
+        ");
+
         $stmt->bind_param("i", $materi_id);
         $stmt->execute();
-        return $stmt->get_result()->fetch_assoc();
+        $row = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return $row ?: null;
     }
 
-    public function getSubmateriWithNavigation($current_id, $materi_id) {
+    public function getSubmateriWithNavigation(int $current_id, int $materi_id): array
+    {
         $result = [
             'current' => null,
             'previous' => null,
@@ -115,28 +204,39 @@ class Submateri {
         ];
 
         $result['current'] = $this->lihatSubmateriById($current_id);
+        if (!$result['current']) return $result;
+
         $result['previous'] = $this->getPreviousSubmateri($current_id, $materi_id);
         $result['next'] = $this->getNextSubmateri($current_id, $materi_id);
+
+        $currentUrutan = (int)$result['current']['urutan'];
+
+        // total & posisi (aktif saja + materi aktif)
         $stmt = $this->db->prepare("
             SELECT 
                 COUNT(*) as total,
-                (SELECT COUNT(*) FROM submateri 
-                 WHERE materi_id_materi = ? 
-                 AND (urutan < (SELECT urutan FROM submateri WHERE id_subMateri = ?)
-                      OR (urutan = (SELECT urutan FROM submateri WHERE id_subMateri = ?)
-                          AND id_subMateri < ?))) + 1 as position
-            FROM submateri 
-            WHERE materi_id_materi = ?
+                SUM(
+                    CASE
+                        WHEN (urutan < ?)
+                          OR (urutan = ? AND id_subMateri < ?)
+                        THEN 1 ELSE 0
+                    END
+                ) + 1 AS position
+            FROM submateri s
+            JOIN materi m ON m.id_materi = s.materi_id_materi
+            WHERE s.materi_id_materi = ?
+              AND s.deleted_at IS NULL
+              AND m.deleted_at IS NULL
         ");
-        
-        $stmt->bind_param("iiiii", $materi_id, $current_id, $current_id, $current_id, $materi_id);
+
+        $stmt->bind_param("iiii", $currentUrutan, $currentUrutan, $current_id, $materi_id);
         $stmt->execute();
-        $count_result = $stmt->get_result()->fetch_assoc();
-        
-        $result['total'] = $count_result['total'] ?? 0;
-        $result['current_position'] = $count_result['position'] ?? 0;
+        $count = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        $result['total'] = (int)($count['total'] ?? 0);
+        $result['current_position'] = (int)($count['position'] ?? 0);
 
         return $result;
     }
 }
-?>
