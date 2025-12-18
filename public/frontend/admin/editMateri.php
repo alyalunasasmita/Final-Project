@@ -74,30 +74,10 @@ require_once __DIR__ . '/../../assets/layout/header.php';
                 <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-cyan-700 to-blue-700 bg-clip-text text-transparent">
                     Edit Course
                 </h1>
-                <p class="text-gray-600 mt-2 font-light">Update course information and content</p>
             </div>
         </div>
         
-        <!-- Progress Indicator -->
-        <div class="flex items-center justify-between max-w-2xl mb-8">
-            <div class="flex items-center">
-                <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold shadow-md">
-                    <span class="material-icons text-sm">edit</span>
-                </div>
-                <div class="h-1 w-24 bg-gradient-to-r from-cyan-600 to-blue-600"></div>
-            </div>
-            <div class="flex items-center">
-                <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gradient-to-r from-gray-200 to-gray-300 text-gray-500 font-semibold">
-                    <span class="material-icons text-sm">preview</span>
-                </div>
-                <div class="h-1 w-24 bg-gradient-to-r from-gray-200 to-gray-300"></div>
-            </div>
-            <div class="flex items-center">
-                <div class="w-8 h-8 flex items-center justify-center rounded-full bg-gradient-to-r from-gray-200 to-gray-300 text-gray-500 font-semibold">
-                    <span class="material-icons text-sm">check</span>
-                </div>
-            </div>
-        </div>
+        
     </div>
 
     <!-- Form Container -->
@@ -107,11 +87,6 @@ require_once __DIR__ . '/../../assets/layout/header.php';
             <!-- Form Header -->
             <div class="px-6 py-5 border-b border-gray-200/60 bg-gradient-to-r from-cyan-50/30 to-blue-50/30">
                 <div class="flex items-center gap-4">
-                    <div class="p-3 bg-gradient-to-br from-cyan-100 to-blue-100 rounded-xl border border-cyan-200 shadow-sm">
-                        <span class="material-icons text-xl text-cyan-600">
-                            edit_note
-                        </span>
-                    </div>
                     <div>
                         <h2 class="text-xl font-semibold text-gray-800">Edit Course Information</h2>
                         <p class="text-sm text-gray-600 mt-1 font-light">Update the course details below</p>
@@ -154,8 +129,7 @@ require_once __DIR__ . '/../../assets/layout/header.php';
                                         required
                                         class="form-input w-full pl-12 pr-4 py-3.5 border border-gray-300 rounded-xl focus:border-cyan-400 focus:ring-2 focus:ring-cyan-200/50 transition-all duration-300 bg-white/50"
                                         autofocus
-                                        placeholder="Enter course title"
-                                    >
+                                        placeholder="Enter course title">
                                 </div>
                                 <p class="mt-2 text-sm text-gray-500 flex items-center gap-2">
                                     <span class="material-icons text-xs text-cyan-500">
@@ -164,8 +138,6 @@ require_once __DIR__ . '/../../assets/layout/header.php';
                                     Update the course title as needed
                                 </p>
                             </div>
-
-                            <!-- Course Description Field -->
                             <div class="group">
                                 <div class="flex items-center justify-between mb-3">
                                     <label for="deskripsi" class="block text-sm font-medium text-gray-700">
@@ -196,12 +168,6 @@ require_once __DIR__ . '/../../assets/layout/header.php';
                                 </div>
                                 <div class="mt-3">
                                     <div class="flex items-center justify-between text-sm">
-                                        <p class="text-gray-500 flex items-center gap-2">
-                                            <span class="material-icons text-xs text-cyan-500">
-                                                lightbulb
-                                            </span>
-                                            Update the learning objectives and description
-                                        </p>
                                         <div class="flex items-center gap-2">
                                             <div class="w-24 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                                                 <div id="progressBar" class="h-full bg-gradient-to-r from-cyan-400 to-blue-400 transition-all duration-300" 
@@ -214,46 +180,6 @@ require_once __DIR__ . '/../../assets/layout/header.php';
                             </div>
                         </div>
                     </div>
-
-                    
-
-                    <!-- Divider -->
-                    <div class="relative">
-                        <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-gray-200/60"></div>
-                        </div>
-                        <div class="relative flex justify-center">
-                            <span class="px-4 bg-gradient-to-br from-white to-gray-50 text-sm text-gray-400">
-                                Review Changes
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Summary of Changes -->
-                    <div class="bg-gradient-to-r from-blue-50/30 to-cyan-50/30 border border-blue-200/50 rounded-xl p-5">
-                        <div class="flex items-start gap-3">
-                            <div class="flex-shrink-0 p-2 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-lg">
-                                <span class="material-icons text-blue-600 text-sm">
-                                    insights
-                                </span>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="font-medium text-gray-700 mb-2">Update Summary</h4>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                                    <div>
-                                        <p class="text-gray-500 mb-1">Current Course:</p>
-                                        <p class="font-medium text-gray-800"><?= htmlspecialchars($data['nama_materi'] ?? 'Untitled') ?></p>
-                                    </div>
-                                    <div>
-                                        <p class="text-gray-500 mb-1">Character Count:</p>
-                                        <p class="font-medium text-gray-800"><?= strlen($data['deskripsi_materi'] ?? '') ?> characters</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Action Buttons -->
                     <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 border-t border-gray-200/60">
                         
                         
@@ -280,17 +206,9 @@ require_once __DIR__ . '/../../assets/layout/header.php';
                             </button>
                         </div>
                     </div>
-
                 </form>
             </div>
-        </div>
-
-        <!-- Quick Tips -->
-        
-            
-            
-            
-            
+        </div>            
             </div>
         </div>
     </div>
