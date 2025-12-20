@@ -62,7 +62,7 @@ class SessionManager {
         }
         
         // Redirect to login page
-        header("Location: /frontend/login.php");
+        header("Location: " . BASE_URL . "pages/auth/login.php");
         exit;
     }
 

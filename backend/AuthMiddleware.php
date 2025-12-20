@@ -40,7 +40,7 @@ class AuthMiddleware {
         }
         
         // Gunakan path absolut - sesuaikan dengan struktur project
-        $loginPath = '/finalProject/public/frontend/login.php';
+        $loginPath = '' . BASE_URL . 'pages/auth/login.php';
         
         if (!headers_sent()) {
             header("Location: " . $loginPath);
@@ -73,9 +73,9 @@ class AuthMiddleware {
         // Cek apakah sudah login menggunakan method yang benar
         if ($session->isValid()) {
             if ($session->isAdmin()) {
-                header("Location: /finalProject/frontend/admin/dashboard.php");
+                header("Location: " . BASE_URL . "pages/admin/dashboardAdmin.php");
             } else {
-                header("Location: /finalProject/frontend/user/dashboard.php");
+                header("Location: " . BASE_URL . "pages/user/dashboardUser.php");
             }
             exit;
         }
@@ -126,6 +126,23 @@ class AuthMiddleware {
             'nama' => $session->getUsername(),
             'role' => $session->getRole(),
             'last_activity' => $session->getLastActivity()
+        ];
+    }
+
+    public static function authUserJson(): array {
+        $session = self::getSession();
+
+        if (!$session->isUser()) {
+            http_response_code(401);
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode(['error' => 'Unauthorized']);
+            exit;
+        }
+
+        return [
+            'id' => $session->getUserId(),
+            'nama' => $session->getUsername(),
+            'role' => $session->getRole()
         ];
     }
 }

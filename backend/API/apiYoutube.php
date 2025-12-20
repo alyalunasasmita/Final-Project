@@ -2,7 +2,8 @@
 
 namespace App\YouTube;
 
-require_once __DIR__ . '/../config/env.php';
+require_once ROOT_PATH . '/config/env.php';
+
 use App\Env;
 
 class ApiYouTube {

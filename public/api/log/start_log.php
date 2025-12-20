@@ -1,10 +1,10 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 session_start();
-
-require_once __DIR__ . '/../../../config/nyambung.php';
-require_once __DIR__ . '/../../../backend/activityBelajar.php';
-require_once __DIR__ . '/../../../api/apiyoutube.php';
+require_once __DIR__ . '/../../config.php';
+require_once ROOT_PATH . '/config/nyambung.php';
+require_once ROOT_PATH . '/backend/activityBelajar.php';
+require_once ROOT_PATH . '/backend/api/apiyoutube.php';
 
 use App\database\Database;
 use App\Api\ApiYouTube;

@@ -74,34 +74,34 @@ class Autentikasi {
         $result = $this-> register($nama, $username, $email, $password); 
 
         if ($result === "registrasi berhasil"){
-            header ("location: login.php"); 
+            header ("location: login.php?success=" . urlencode($result)); 
         }else {
            header("Location: register.php?error=" . urlencode($result)); 
         }
     }
 
-    public function loginAndRedirect($username, $password) {
+        public function loginAndRedirect($username, $password) {
         $result = $this->login($username, $password);
-        
+
         if ($result === "username tidak ditemukan" || $result === "password salah!") {
-            header("Location: login.php?error=" . urlencode($result));
+            header("Location: " . BASE_URL . "pages/auth/login.php?error=" . urlencode($result));
             exit;
         }
 
-        // SESUAIKAN PATH dengan struktur
         if ($result === "admin") {
-            header("Location: admin/dashboardAdmin.php"); // ke frontend/admin/dashboard.php
+            header("Location: " . BASE_URL . "pages/admin/dashboardAdmin.php");
             exit;
         }
 
         if ($result === "user") {
-            header("Location: user/dashboardUser.php"); // ke frontend/user/dashboardUser.php
+            header("Location: " . BASE_URL . "pages/user/dashboardUser.php");
             exit;
         }
 
-        header("Location: login.php?error=Role tidak dikenali");
+        header("Location: " . BASE_URL . "pages/auth/login.php?error=" . urlencode("Role tidak dikenali"));
         exit;
     }
+
     
     public function verifikasiUser($username, $email) {
         $stmt = $this->db->prepare(

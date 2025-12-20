@@ -64,20 +64,39 @@ class Schedule
     }
 
     
-    public function tambahSchedule(string $nama, ?string $deskripsi, string $tanggal,
-        string $tipeEvent, string $jamMulai, string $jamSelesai, ?int $remindBeforeMinutes): bool {
+    public function tambahSchedule(
+        string $nama,
+        ?string $deskripsi,
+        string $tanggal,
+        string $jamMulai,
+        string $jamSelesai,
+        ?int $remindBeforeMinutes
+    ): bool {
 
         $this->validasiDasar($nama, $tanggal, $jamMulai, $jamSelesai);
         $durasi = $this->hitungDurasi($jamMulai, $jamSelesai);
+
         $stmt = $this->db->prepare("
             INSERT INTO schedule
-            (nama_schedule, deskripsi, tanggal, tipe_event, jam_mulai, jam_selesai, durasi, users_id, remind_before_minutes, reminder_sent_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)
+            (nama_schedule, deskripsi, tanggal, jam_mulai, jam_selesai, durasi, users_id, remind_before_minutes, reminder_sent_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, NULL)
         ");
-        $stmt->bind_param( "sssssssii", $nama, $deskripsi, $tanggal, $tipeEvent, $jamMulai,
-            $jamSelesai, $durasi, $this->userId, $remindBeforeMinutes);
+
+        $stmt->bind_param(
+            "ssssssii",
+            $nama,
+            $deskripsi,
+            $tanggal,
+            $jamMulai,
+            $jamSelesai,
+            $durasi,
+            $this->userId,
+            $remindBeforeMinutes
+        );
+
         return $stmt->execute();
     }
+
 
     public function listSchedule(): array
     {
@@ -99,13 +118,12 @@ class Schedule
         string $nama,
         ?string $deskripsi,
         string $tanggal,
-        string $tipeEvent,
         string $jamMulai,
         string $jamSelesai,
         ?int $remindBeforeMinutes
     ): bool {
-        $this->validasiDasar($nama, $tanggal, $jamMulai, $jamSelesai);
 
+        $this->validasiDasar($nama, $tanggal, $jamMulai, $jamSelesai);
         $durasi = $this->hitungDurasi($jamMulai, $jamSelesai);
 
         $stmt = $this->db->prepare("
@@ -113,7 +131,6 @@ class Schedule
             SET nama_schedule = ?,
                 deskripsi = ?,
                 tanggal = ?,
-                tipe_event = ?,
                 jam_mulai = ?,
                 jam_selesai = ?,
                 durasi = ?,
@@ -123,11 +140,10 @@ class Schedule
         ");
 
         $stmt->bind_param(
-            "sssssssiii",
+            "ssssssiii",
             $nama,
             $deskripsi,
             $tanggal,
-            $tipeEvent,
             $jamMulai,
             $jamSelesai,
             $durasi,

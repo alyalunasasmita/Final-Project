@@ -1,9 +1,11 @@
 <?php
 session_start();
+require_once __DIR__ . '/../../../config.php';
+require_once ROOT_PATH . '/backend/service/resetPassword.php';
 
 header('Content-Type: application/json');
 
-require_once __DIR__ . '/../../../backend/service/resetPassword.php';
+
 use App\Service\PasswordResetService;
 
 $email = $_SESSION['reset_email'] ?? null;

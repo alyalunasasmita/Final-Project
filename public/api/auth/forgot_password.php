@@ -1,8 +1,9 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 session_start();
+require_once __DIR__ . '/../../../config.php';
+require_once ROOT_PATH . '/backend/service/resetPassword.php';
 
-require_once __DIR__ . '/../../../backend/service/resetPassword.php';
 use App\Service\PasswordResetService;
 
 $email = trim($_POST['email'] ?? '');
