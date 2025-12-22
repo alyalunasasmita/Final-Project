@@ -108,9 +108,11 @@ User:
 ## Diagram Arsitektur rekomendasi video pada materi menggunakan API youtube
 flowchart TB (Top to Bottom)
   Admin[Administrator] -->|1. Membuat materi (judul dan isi)| AdminPanel[Halaman Admin (PHP Native)]
+  
   AdminPanel -->|2. Menyimpan materi| Database[(Database MySQL: Materi)]
 
   User[Pengguna] -->|3. Membuka halaman materi| MateriPage[Halaman Materi (PHP Native)]
+  
   MateriPage -->|4. Mengambil judul materi| Database
 
   MateriPage -->|5. Memeriksa cache rekomendasi berdasarkan id atau judul materi| Cache[(Cache: File JSON / Redis)]
@@ -118,11 +120,17 @@ flowchart TB (Top to Bottom)
   Cache -->|Jika ada dan masih berlaku| MateriPage
 
   Cache -->|Jika tidak ada atau sudah kedaluwarsa| YoutubeCall[Proses Mengambil Rekomendasi Video]
+  
   YoutubeCall -->|6. Menggunakan judul materi sebagai kata kunci pencarian\n(dapat ditambah kata 'penjelasan')| YoutubeCall
-  YoutubeCall -->|7. Mengirim permintaan ke YouTube Data API| YouTubeAPI[YouTube Data API v3]
+  
+  YoutubeCall -->|7. Mengirim permintaan ke YouTube Data API| YouTubeAPI[YouTube Data API v2]
+  
   YouTubeAPI -->|8. Mengembalikan daftar video| YoutubeCall
+  
   YoutubeCall -->|9. Memilih maksimal 3 video yang paling sesuai| YoutubeCall
+  
   YoutubeCall -->|10. Menyimpan hasil rekomendasi ke cache (dengan batas waktu simpan)| Cache
+  
 
   MateriPage -->|11. Menampilkan materi dan rekomendasi video| User
 
