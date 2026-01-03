@@ -73,51 +73,12 @@ require_once PUBLIC_PATH . '/partials/sbAdmin.php';
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Materi Info Box -->
-                        <div class="bg-white border border-blue-200 rounded-lg p-3 shadow-sm">
-                            <div class="flex items-center space-x-2">
-                                <i class="fas fa-info-circle text-blue-500"></i>
-                                <span class="text-sm font-medium text-gray-700">ID Materi:</span>
-                                <span class="text-sm font-semibold text-gray-800"><?php echo htmlspecialchars($idMateri); ?></span>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
                 <!-- Form Content -->
                 <div class="p-6 md:p-8">
                     <form action="" method="POST" class="space-y-8">
-                        
-                        <!-- Informasi Materi -->
-                        <div class="bg-blue-50 border border-blue-100 rounded-xl p-5 mb-6">
-                            <div class="flex items-center mb-3">
-                                <i class="fas fa-book-open text-blue-600 mr-3 text-lg"></i>
-                                <h3 class="font-semibold text-blue-800">Informasi Materi</h3>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-600 mb-1">Nama Materi</label>
-                                    <div class="p-3 bg-white rounded-lg border border-gray-200">
-                                        <p class="font-medium text-gray-800">
-                                            <?php 
-                                            if (isset($materiData['nama_materi'])) {
-                                                echo htmlspecialchars($materiData['nama_materi']);
-                                            } else {
-                                                echo "Materi #" . htmlspecialchars($idMateri);
-                                            }
-                                            ?>
-                                        </p>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-600 mb-1">ID Materi</label>
-                                    <div class="p-3 bg-white rounded-lg border border-gray-200">
-                                        <p class="font-medium text-gray-800"><?php echo htmlspecialchars($idMateri); ?></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
                         <!-- Urutan Submateri -->
                         <div>
@@ -241,55 +202,6 @@ require_once PUBLIC_PATH . '/partials/sbAdmin.php';
                         </div>
 
                     </form>
-                </div>
-            </div>
-
-            <!-- Quick Guidelines -->
-            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-gradient-to-br from-blue-50 to-white border border-blue-100 rounded-xl p-5 shadow-sm">
-                    <div class="flex items-center mb-4">
-                        <div class="p-3 bg-blue-100 rounded-lg mr-4">
-                            <i class="fas fa-lightbulb text-blue-600 text-xl"></i>
-                        </div>
-                        <h3 class="font-bold text-blue-800">Tips Penulisan</h3>
-                    </div>
-                    <ul class="space-y-2">
-                        <li class="flex items-start text-sm text-blue-700">
-                            <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
-                            <span>Gunakan bahasa yang mudah dipahami</span>
-                        </li>
-                        <li class="flex items-start text-sm text-blue-700">
-                            <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
-                            <span>Struktur konten dengan heading dan paragraf</span>
-                        </li>
-                        <li class="flex items-start text-sm text-blue-700">
-                            <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
-                            <span>Sertakan contoh jika diperlukan</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="bg-gradient-to-br from-green-50 to-white border border-green-100 rounded-xl p-5 shadow-sm">
-                    <div class="flex items-center mb-4">
-                        <div class="p-3 bg-green-100 rounded-lg mr-4">
-                            <i class="fas fa-clipboard-check text-green-600 text-xl"></i>
-                        </div>
-                        <h3 class="font-bold text-green-800">Penting</h3>
-                    </div>
-                    <ul class="space-y-2">
-                        <li class="flex items-start text-sm text-green-700">
-                            <i class="fas fa-exclamation-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Urutan menentukan tampilan di halaman</span>
-                        </li>
-                        <li class="flex items-start text-sm text-green-700">
-                            <i class="fas fa-exclamation-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Judul harus unik dan spesifik</span>
-                        </li>
-                        <li class="flex items-start text-sm text-green-700">
-                            <i class="fas fa-exclamation-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Konten akan langsung tersimpan ke sistem</span>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>

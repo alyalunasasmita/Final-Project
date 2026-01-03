@@ -1,6 +1,6 @@
 <?php
 namespace App;
-// backend/AuthMiddleware.php
+
 require_once __DIR__ . "/SessionManager.php";
 require_once __DIR__ . "/activity.php";
 
@@ -23,23 +23,18 @@ class AuthMiddleware {
         if (!$session->isUser()) {
             self::redirectToLogin();
         }
-        
-        // PERBAIKAN: Gunakan method yang benar dari SessionManager
         return [
-            'id' => $session->getUserId(),    // getUserId() bukan get('user_id')
-            'nama' => $session->getUsername(), // getUsername() bukan get('nama')
-            'email' => null,                  // Jika ada field email di session, tambahkan
-            'role' => $session->getRole()     // getRole() bukan get('role')
+            'id' => $session->getUserId(),  
+            'nama' => $session->getUsername(), 
+            'email' => null,                 
+            'role' => $session->getRole()     
         ];
     }
     
     private static function redirectToLogin(): void {
-        // Clear any output buffers
         while (ob_get_level() > 0) {
             ob_end_clean();
         }
-        
-        // Gunakan path absolut - sesuaikan dengan struktur project
         $loginPath = '' . BASE_URL . 'pages/auth/login.php';
         
         if (!headers_sent()) {

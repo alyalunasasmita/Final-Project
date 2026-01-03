@@ -163,96 +163,43 @@ require_once PUBLIC_PATH . '/pages/admin/cardAdmin.php';
                 </div>
             </div>
 
-            <!-- Charts Section - 2 Cards Vertically Stacked -->
-            <div class="grid grid-cols-1 gap-4 lg:gap-6 mb-6 lg:mb-8">
-                <!-- Aktivitas Chart Card -->
-                <div id="cardAktivitas" 
-                     class="bg-white border border-slate-200 rounded-2xl shadow-lg p-4 lg:p-6
-                            transition-all duration-500 ease-out" style="transition-delay: 100ms;">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 lg:mb-6 gap-3">
-                        <div>
-                            <h3 class="text-sm lg:text-base font-semibold text-slate-700">
-                                Aktivitas Sistem (14 hari)
-                            </h3>
-                            <p class="text-xs lg:text-sm text-gray-500 mt-1">Daily user interactions and system activities</p>
-                        </div>
-                        <div class="flex items-center text-xs text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg">
-                            <span class="material-icons text-sm mr-1">update</span>
-                            <span>Updated today</span>
-                        </div>
-                    </div>
-                    <div class="h-56 sm:h-64 lg:h-72 w-full">
-                        <canvas id="chartAktivitas"></canvas>
-                    </div>
-                </div>
+            <!-- CHART SECTION -->
+<div class="grid grid-cols-1 gap-4 lg:gap-6 mb-6 lg:mb-8">
 
-                <!-- Top Materi Chart Card -->
-                <div id="cardSesiStatus"
-                     class="bg-white border border-slate-200 rounded-2xl shadow-lg p-4 lg:p-6
-                            transition-all duration-500 ease-out" style="transition-delay: 200ms;">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 lg:mb-6 gap-3">
-                        <div>
-                            <h3 class="text-sm lg:text-base font-semibold text-slate-700">
-                                Top Materi (Total Durasi)
-                            </h3>
-                            <p class="text-xs lg:text-sm text-gray-500 mt-1">Most engaging learning materials by duration</p>
-                        </div>
-                        <div class="flex items-center text-xs text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg">
-                            <span class="material-icons text-sm mr-1">trending_up</span>
-                            <span>This month</span>
-                        </div>
-                    </div>
-                    <div class="h-56 sm:h-64 lg:h-72 w-full">
-                        <canvas id="chartsesiStatus"></canvas>
-                    </div>
-                </div>
+    <!-- Aktivitas Chart -->
+    <div class="bg-white border border-slate-200 rounded-2xl shadow-lg p-4 lg:p-6">
+        <div class="mb-4">
+            <h3 class="text-sm lg:text-base font-semibold text-slate-700">
+                Aktivitas Sistem (14 hari)
+            </h3>
+            <p class="text-xs text-gray-500">Daily user interactions and system activities</p>
+        </div>
+
+        <!-- WAJIB ADA HEIGHT -->
+        <div class="relative w-full h-56 sm:h-64 lg:h-72">
+            <canvas id="chartAktivitas"></canvas>
+        </div>
+    </div>
+
+    <!-- Top Materi Chart -->
+    <div class="bg-white border border-slate-200 rounded-2xl shadow-lg p-4 lg:p-6">
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <h3 class="text-sm lg:text-base font-semibold text-slate-700">
+                    Top Materi (Total Durasi)
+                </h3>
+                <p class="text-xs text-gray-500">Most engaging learning materials</p>
             </div>
+            <span class="text-xs bg-gray-100 px-3 py-1 rounded-lg">
+                This month
+            </span>
+        </div>
 
-            <!-- Recent Courses & Quick Actions Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
-                <!-- Recent Courses -->
-                <div>
-                    <div class="bg-gradient-to-br from-white to-gray-50/50 rounded-2xl shadow-lg border border-gray-200/60 p-4 lg:p-6">
-                        <div class="flex items-center justify-between mb-4 lg:mb-6">
-                            <div>
-                                <h2 class="text-lg lg:text-xl font-semibold text-gray-800">Recent Courses</h2>
-                                <p class="text-xs lg:text-sm text-gray-500 mt-1">Latest learning materials</p>
-                            </div>
-                            <a href="lihatMateri.php" class="text-xs lg:text-sm font-medium text-cyan-600 hover:text-cyan-700 flex items-center">
-                                View All <span class="material-icons text-sm ml-1">arrow_forward</span>
-                            </a>
-                        </div>
-                        
-                        <div class="space-y-3 lg:space-y-4">
-                            <?php if (!empty($data['recent_courses'])): ?>
-                                <?php foreach ($data['recent_courses'] as $course): ?>
-                                    <div class="group flex items-center gap-3 lg:gap-4 p-3 lg:p-4 bg-gradient-to-r from-white to-gray-50/80 border border-gray-200/60 rounded-xl hover:border-cyan-200 hover:shadow-md transition-all duration-300">
-                                        <div class="w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center rounded-xl bg-gradient-to-br from-cyan-100 to-blue-100">
-                                            <span class="material-icons text-cyan-600">book</span>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <h4 class="text-sm lg:text-base font-medium text-gray-800 truncate"><?= htmlspecialchars($course['nama_materi']) ?></h4>
-                                            <p class="text-xs lg:text-sm text-gray-500 mt-1 truncate">
-                                                <?= htmlspecialchars(substr($course['deskripsi_materi'] ?? 'No description', 0, 50)) ?>...
-                                            </p>
-                                        </div>
-                                        <a href="editMateri.php?id=<?= $course['id_materi'] ?>" 
-                                           class="p-1 lg:p-2 text-gray-400 hover:text-cyan-600 rounded-lg hover:bg-cyan-50 transition-colors">
-                                            <span class="material-icons text-sm">edit</span>
-                                        </a>
-                                    </div>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <div class="text-center py-6 lg:py-8">
-                                    <div class="w-12 h-12 lg:w-16 lg:h-16 mx-auto mb-3 lg:mb-4 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center">
-                                        <span class="material-icons text-xl lg:text-2xl text-gray-400">add_circle</span>
-                                    </div>
-                                    <p class="text-sm lg:text-base text-gray-500">No courses added yet</p>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </div>
+        <div class="relative w-full h-56 sm:h-64 lg:h-72">
+            <canvas id="chartsesiStatus"></canvas>
+        </div>
+    </div>
+</div>
 
                 <!-- Quick Actions -->
                 <div>

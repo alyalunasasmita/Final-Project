@@ -1,17 +1,24 @@
 <?php
 require_once __DIR__ . "/../../config.php";
 require_once ROOT_PATH . "/backend/subMateri.php";
+require_once ROOT_PATH . "/backend/materi.php";
 require_once ROOT_PATH . "/backend/AuthMiddleware.php";
 
 use App\AuthMiddleware;
 AuthMiddleware::authAdmin();
 use App\submateri\Submateri;
+use App\materi\Materi;
 
+$materiModel = new Materi();
 $id = $_GET['id']; // id materi
 $materiId = $id;
 
 $listSubmateri = new Submateri(); 
 $subMateri = $listSubmateri->lihatSubmateriByMateri($id);
+
+$materi = $materiModel->getMateriById($id); 
+$namaMateri = $materi['data']['nama_materi'];
+
 
 require_once PUBLIC_PATH . '/partials/header.php';
 require_once PUBLIC_PATH . '/partials/sbAdmin.php';
@@ -34,11 +41,12 @@ require_once PUBLIC_PATH . '/partials/sbAdmin.php';
                         </div>
                         <div>
                             <h2 class="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-cyan-700 to-blue-700 bg-clip-text text-transparent">
-                                Course Modules
+                                Materi: <?= htmlspecialchars($namaMateri) ?>
                             </h2>
                             <p class="text-sm text-gray-600 mt-1 font-light">
-                                Manage and organize your learning content
+                                Kelola Submateri
                             </p>
+
                         </div>
                     </div>
                 </div>
@@ -50,7 +58,7 @@ require_once PUBLIC_PATH . '/partials/sbAdmin.php';
                         <span class="material-icons text-lg mr-2">
                             add_circle
                         </span>
-                        <span>Add New Module</span>
+                        <span>Tambah Submateri Baru</span>
                         <span class="material-icons text-sm ml-2 group-hover:translate-x-1 transition-transform">
                             arrow_forward
                         </span>
@@ -60,7 +68,7 @@ require_once PUBLIC_PATH . '/partials/sbAdmin.php';
                         <span class="material-icons text-lg mr-2">
                             arrow_back
                         </span>
-                        <span>Back to Courses</span>
+                        <span>Kembali ke materi</span>
                     </a>
                 </div>
             </div>
@@ -81,7 +89,7 @@ require_once PUBLIC_PATH . '/partials/sbAdmin.php';
                             <h3 class="text-lg font-semibold text-gray-800">Modules List</h3>
                             <div class="inline-flex items-center px-3 py-1.5 bg-cyan-50 text-cyan-700 rounded-full text-sm font-medium">
                                 <span class="w-2 h-2 bg-cyan-400 rounded-full mr-2 animate-pulse"></span>
-                                <?= count($subMateri) ?> modules
+                                <?= count($subMateri) ?> submateri
                             </div>
                         </div>
                         
@@ -95,11 +103,11 @@ require_once PUBLIC_PATH . '/partials/sbAdmin.php';
                                             '<?= $s['id_subMateri'] ?>',
                                             <?= $index ?>
                                         )"
-                                        class="group relative bg-gradient-to-r from-white to-gray-50/80 border border-gray-200/80 rounded-xl p-4 hover:border-cyan-300/60 hover:shadow-lg hover:bg-gradient-to-r hover:from-cyan-50/30 hover:to-blue-50/30 cursor-pointer transition-all duration-300 transform hover:-translate-y-0.5"
+                                        class="group relative bg-gradient-to-r from-white to-gray-50/80 border border-gray-200/80 rounded-xl p-4 pl-6 hover:border-cyan-300/60 hover:shadow-lg hover:bg-gradient-to-r hover:from-cyan-50/30 hover:to-blue-50/30 cursor-pointer transition-all duration-300 transform hover:-translate-y-0.5"
                                         id="card-<?= $index ?>"
                                     >
                                         <!-- Module Indicator -->
-                                        <div class="absolute -left-2 top-1/2 transform -translate-y-1/2 w-1 h-10 bg-gradient-to-b from-cyan-400 to-blue-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                        <div class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-10 bg-gradient-to-b from-cyan-400 to-blue-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                         
                                         <div class="flex justify-between items-start">
                                             <div class="flex-1 min-w-0">
@@ -124,7 +132,7 @@ require_once PUBLIC_PATH . '/partials/sbAdmin.php';
                                                         <span class="material-icons text-xs">
                                                             schedule
                                                         </span>
-                                                        <span>Module <?= $index + 1 ?></span>
+                                                        <span>Modul <?= $index + 1 ?></span>
                                                     </div>
                                                     <div class="flex items-center gap-1">
                                                         <span class="material-icons text-xs">
@@ -149,14 +157,14 @@ require_once PUBLIC_PATH . '/partials/sbAdmin.php';
                                         playlist_add
                                     </span>
                                 </div>
-                                <h4 class="text-lg font-medium text-gray-700 mb-2">No Modules Yet</h4>
+                                <h4 class="text-lg font-medium text-gray-700 mb-2">Belum Ada Submateri</h4>
                                 <p class="text-gray-500 text-sm mb-6 max-w-xs mx-auto">
-                                    Start by adding your first learning module to this course
+                                    Mulai Buat Submateri
                                 </p>
                                 <a href="tambahSubmateri.php?id=<?= $id ?>" 
                                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-medium rounded-lg transition-all duration-300">
                                     <span class="material-icons">add</span>
-                                    Create First Module
+                                    Buat Submateri Pertama
                                 </a>
                             </div>
                         <?php endif; ?>
@@ -183,15 +191,15 @@ require_once PUBLIC_PATH . '/partials/sbAdmin.php';
                                     </span>
                                 </div>
                             </div>
-                            <h3 class="text-xl font-semibold text-gray-700 mb-2">Select a Module</h3>
+                            <h3 class="text-xl font-semibold text-gray-700 mb-2">Pilih Modul</h3>
                             <p class="text-gray-500 text-center max-w-md">
-                                Choose a module from the list to view and edit its content
+                                Pilih modul, lihat detail dan edit.
                             </p>
                             <div class="mt-6 flex items-center gap-2 text-sm text-gray-400">
                                 <span class="material-icons text-base">
                                     info
                                 </span>
-                                <span>Click any module card to begin</span>
+                                <span>klil modul apapun untuk memulai</span>
                             </div>
                         </div>
 
@@ -226,7 +234,7 @@ require_once PUBLIC_PATH . '/partials/sbAdmin.php';
                                        class="group/delete inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-red-50 to-pink-50 hover:from-red-100 hover:to-pink-100 border border-red-300 hover:border-red-400 text-red-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
                                        onclick="return confirm('Are you sure you want to delete this module? This action cannot be undone.')">
                                         <span class="material-icons text-base">delete</span>
-                                        <span class="font-medium">Delete</span>
+                                        <span class="font-medium">Hapus</span>
                                     </a>
                                 </div>
                             </div>
@@ -243,19 +251,14 @@ require_once PUBLIC_PATH . '/partials/sbAdmin.php';
                                         <a id="editLink2" 
                                            class="inline-flex items-center gap-2 px-4 py-2.5 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-all duration-300">
                                             <span class="material-icons">edit_note</span>
-                                            Edit Content
+                                            Edit Submateri
                                         </a>
                                         <a id="hapusLink2" 
                                            class="inline-flex items-center gap-2 px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all duration-300"
-                                           onclick="return confirm('Delete this module? This cannot be undone.')">
+                                           onclick="return confirm('yakin untuk menghapus submateri ini? aksi ini tidak bisa di undo')">
                                             <span class="material-icons">delete_forever</span>
-                                            Delete Module
+                                            hapus submateri
                                         </a>
-                                        <button onclick="copyContent()"
-                                                class="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-all duration-300">
-                                            <span class="material-icons">content_copy</span>
-                                            Copy Text
-                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -264,7 +267,7 @@ require_once PUBLIC_PATH . '/partials/sbAdmin.php';
                     </div>
                 </div>
 
-            </div> <!-- End Grid Container -->
+            </div>
 
         </div>
     </div>
@@ -336,22 +339,6 @@ function showDetail(title, body, idSub, index) {
     if (window.innerWidth < 1024) {
         panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-}
-
-function copyContent() {
-    const content = document.getElementById('detailBody').textContent;
-    navigator.clipboard.writeText(content).then(() => {
-        // Show temporary notification
-        const notification = document.createElement('div');
-        notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fadeIn';
-        notification.textContent = 'Content copied to clipboard!';
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.classList.add('animate-fadeOut');
-            setTimeout(() => notification.remove(), 300);
-        }, 2000);
-    });
 }
 
 // Initialize on load

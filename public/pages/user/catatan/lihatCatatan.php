@@ -18,19 +18,13 @@ require_once PUBLIC_PATH . '/partials/header.php';
 require_once PUBLIC_PATH . '/partials/sidebar.php';
 ?>
 
-<!-- WRAPPER UTAMA -->
 <div class="min-h-screen bg-[#F9FAFB]">
-    
-    <!-- Desktop: setelah sidebar w-38 (152px) -->
     <div class="md:ml-[152px] lg:ml-[152px] xl:ml-[152px] transition-all duration-300">
-        
-        <!-- Full width container -->
         <div class="w-full">
             
             <!-- HEADER SECTION -->
             <div class="w-full px-3 sm:px-4 md:px-6 py-3 sm:py-4 bg-white border-b border-gray-100">
                 <div class="max-w-full">
-                    <!-- Gunakan grid untuk control yang lebih baik -->
                     <div class="w-full grid grid-cols-1 md:grid-cols-2 items-start md:items-center gap-3 sm:gap-4">
                         
                         <!-- Left Column -->

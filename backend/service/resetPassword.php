@@ -15,9 +15,7 @@ class PasswordResetService {
         return strval(random_int(100000, 999999));
     }
 
-    /* =========================
-       STEP 1: SEND OTP
-    ========================== */
+//kirim otp
     public function sendOtp(string $email): array {
     $email = strtolower(trim($email));
 

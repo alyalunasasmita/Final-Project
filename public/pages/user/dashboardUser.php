@@ -279,7 +279,7 @@ REQUIRE_ONCE PUBLIC_PATH . '/partials/sidebar.php';
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3 sm:gap-4">
                                 <div class="flex-1 min-w-0">
                                     <h3 class="text-lg sm:text-xl font-bold text-[#1F2937] truncate">Durasi Belajar per Materi</h3>
-                                    <p class="text-gray-500 text-xs sm:text-sm mt-1 truncate">Total waktu yang dihabiskan untuk setiap materi</p>
+                                    <p class="text-gray-500 text-xs sm:text-sm mt-1 truncate">Total waktu yang dihabiskan untuk setiap materi (dalam waktu 30 hari)</p>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <div class="p-2 rounded-lg bg-gradient-to-r from-[#10B981]/10 to-[#10B981]/20">
@@ -294,17 +294,12 @@ REQUIRE_ONCE PUBLIC_PATH . '/partials/sidebar.php';
                                 <canvas id="materiChart"></canvas>
                             </div>
                             <div class="mt-3 sm:mt-4 text-center">
-                                <p class="text-xs sm:text-sm text-gray-500">Total durasi belajar berdasarkan materi</p>
+                                <p class="text-xs sm:text-sm text-gray-500">Total durasi belajar berdasarkan materi (dalam 30 hari)</p>
                             </div>
-                        </div>
-                        
-                    </div>
-
-                    <!-- DEADLINE DETAILS SECTION (Optional) -->
-                    
+                        </div>                        
+                    </div>                    
                 </div>
             </main>
-
         </div>
     </div>
 </div>

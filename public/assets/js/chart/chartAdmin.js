@@ -1,36 +1,50 @@
 async function loadDashboardCharts() {
-  const res = await fetch("/api/chart/chartDashboardAdmin.php");
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const data = await res.json();
-
-  // line
-  const c1 = document.getElementById("chartAktivitas");
-  if (c1) {
-    new Chart(c1, {
-      type: "line",
-      data: data.aktivitas_14_hari,
-      options: { responsive: true }
-    });
-  }
-
-  // doughnut
-  const c2 = document.getElementById("chartsesiStatus");
-  if (c2) {
-    // warna biar jelas
-    if (data.sesiStatus?.datasets?.[0] && !data.sesiStatus.datasets[0].backgroundColor) {
-      data.sesiStatus.datasets[0].backgroundColor = ["rgba(255,99,132,0.35)", "rgba(75,192,192,0.35)"];
-      data.sesiStatus.datasets[0].borderColor = ["rgb(255,99,132)", "rgb(75,192,192)"];
-      data.sesiStatus.datasets[0].borderWidth = 1;
+    const res = await fetch("/api/chart/chartDashboardAdmin.php");
+    if (!res.ok) {
+        console.error("Gagal fetch chart data");
+        return;
     }
 
-    new Chart(c2, {
-      type: "doughnut",
-      data: data.sesiStatus,
-      options: { responsive: true, maintainAspectRatio: false }
-    });
-  }
+    const data = await res.json();
+
+    // LINE CHART
+    const ctx1 = document.getElementById("chartAktivitas");
+    if (ctx1 && data.aktivitas_14_hari) {
+        new Chart(ctx1, {
+            type: "line",
+            data: data.aktivitas_14_hari,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                elements: {
+                    line: { tension: 0.4 }
+                },
+                plugins: {
+                    legend: { position: "top" }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    // DOUGHNUT CHART
+    const ctx2 = document.getElementById("chartsesiStatus");
+    if (ctx2 && data.sesiStatus) {
+        new Chart(ctx2, {
+            type: "doughnut",
+            data: data.sesiStatus,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: "65%",
+                plugins: {
+                    legend: { position: "bottom" }
+                }
+            }
+        });
+    }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadDashboardCharts();
-});
+document.addEventListener("DOMContentLoaded", loadDashboardCharts);

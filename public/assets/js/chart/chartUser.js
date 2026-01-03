@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const charts = {};
 
-  // Helper: format durasi (kalau datamu menit, hasilnya jadi "1j 20m")
+  // Helper: format durasi (kalau menit, hasilnya jadi "1j 20m")
     const formatDuration = (value) => {
     const h = Number(value) || 0;
     return `${h.toFixed(2)} h`;

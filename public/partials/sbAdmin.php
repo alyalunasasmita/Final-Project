@@ -81,7 +81,7 @@
             </nav>
         </div>
 
-        <!-- ADMIN LOGOUT & PROFILE -->
+        <!-- BOTTOM -->
         <div class="p-3 border-t border-gray-200 bg-white/50">
             
             <!-- Logout Button -->
@@ -105,17 +105,6 @@
                 </div>
                 <span class="font-sans tracking-wide">Logout</span>
             </a>
-            
-            <!-- Footer -->
-            <div class="text-center pt-3 border-t border-gray-200">
-                <div class="text-xs text-gray-400 font-sans">
-                    <div class="flex justify-center gap-1.5 mb-2">
-                        <div class="w-1.5 h-1.5 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full"></div>
-                        <div class="w-1.5 h-1.5 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
-                        <div class="w-1.5 h-1.5 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"></div>
-                    </div>
-                    <span class="font-light">Admin Panel v2.1</span>
-                </div>
             </div>
         </div>
     </aside>
@@ -216,10 +205,6 @@
             </div>
             <span class="font-sans">Logout</span>
         </a>
-        
-        <div class="text-center pt-3 border-t border-gray-200">
-            <div class="text-xs text-gray-400 font-sans font-light">Admin v2.1</div>
-        </div>
     </div>
 </aside>
 

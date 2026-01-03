@@ -46,15 +46,7 @@ require_once PUBLIC_PATH . '/partials/sidebar.php';
         <div class="bg-white border-b border-gray-100 px-3 sm:px-4 md:px-6 py-4 sm:py-5 md:py-6">
             <div class="w-full max-w-full mx-auto">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-[#2563EB] to-[#93C5FD] rounded-lg sm:rounded-xl flex items-center justify-center shadow-sm">
-                            <i class="fas fa-calendar-plus text-white text-sm sm:text-base"></i>
-                        </div>
-                        <div>
-                            <h1 class="text-lg sm:text-xl md:text-2xl font-semibold text-[#1F2937]">Tambah Jadwal Baru</h1>
-                            <p class="text-gray-500 text-xs sm:text-sm mt-0.5">Buat jadwal kegiatan baru Anda</p>
-                        </div>
-                    </div>
+                
                     <div class="mt-0">
                         <a href="listJadwal.php" 
                            class="group inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-100 text-gray-700 
@@ -129,7 +121,7 @@ require_once PUBLIC_PATH . '/partials/sidebar.php';
                                         <input type="text" 
                                                name="nama" 
                                                required
-                                               class="pl-10 w-full px-3 sm:px-4 py-2.5 sm:py-3.5 bg-white border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-all duration-200"
+                                               class="w-full pl-10 pr-3 sm:pr-4 py-2.5 sm:py-3.5 bg-white border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-all duration-200"
                                                placeholder="Contoh: Belajar Matematika Lanjutan">
                                     </div>
                                 </div>
@@ -150,7 +142,7 @@ require_once PUBLIC_PATH . '/partials/sidebar.php';
                                         </div>
                                         <textarea name="deskripsi" 
                                                   rows="4"
-                                                  class="pl-10 w-full px-3 sm:px-4 py-2.5 sm:py-3.5 bg-white border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-all duration-200 resize-none"
+                                                  class="w-full pl-10 pr-3 sm:pr-4 py-2.5 sm:py-3.5 bg-white border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-all duration-200 resize-none"
                                                   placeholder="Deskripsi detail tentang kegiatan ini..."></textarea>
                                     </div>
                                 </div>
@@ -172,7 +164,7 @@ require_once PUBLIC_PATH . '/partials/sidebar.php';
                                         <input type="date" 
                                                name="tanggal" 
                                                required
-                                               class="pl-10 w-full px-3 sm:px-4 py-2.5 sm:py-3.5 bg-white border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-all duration-200">
+                                               class="w-full pl-10 pr-3 sm:pr-4 py-2.5 sm:py-3.5 bg-white border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-all duration-200">
                                     </div>
                                 </div>
                             </div>
@@ -198,7 +190,7 @@ require_once PUBLIC_PATH . '/partials/sidebar.php';
                                             <input type="time" 
                                                    name="jam_mulai" 
                                                    required
-                                                   class="pl-10 w-full px-3 sm:px-4 py-2.5 sm:py-3.5 bg-white border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-all duration-200">
+                                                   class="w-full pl-10 pr-3 sm:pr-4 py-2.5 sm:py-3.5 bg-white border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-all duration-200">
                                         </div>
                                     </div>
 
@@ -209,17 +201,32 @@ require_once PUBLIC_PATH . '/partials/sidebar.php';
                                             </label>
                                             <span class="text-xs text-gray-500">Required</span>
                                         </div>
-                                        <div class="relative">
-                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none group-focus-within:text-[#2563EB]">
-                                                <svg class="w-4 h-4 text-gray-400 group-focus-within:text-[#2563EB] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                </svg>
-                                            </div>
-                                            <input type="time" 
-                                                   name="jam_selesai" 
-                                                   required
-                                                   class="pl-10 w-full px-3 sm:px-4 py-2.5 sm:py-3.5 bg-white border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-all duration-200">
-                                        </div>
+                                        <div class="relative group">
+                                    <!-- Icon -->
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none
+                                                text-gray-400 group-focus-within:text-[#2563EB] transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+
+                                    <!-- Input -->
+                                    <input
+                                        type="time"
+                                        name="jam_selesai"
+                                        required
+                                        class="w-full
+                                            pl-10 pr-3 sm:pr-4
+                                            py-2.5 sm:py-3.5
+                                            bg-white border border-gray-300
+                                            rounded-lg sm:rounded-xl
+                                            focus:ring-2 focus:ring-[#2563EB]/30
+                                            focus:border-[#2563EB]
+                                            transition-all duration-200"
+                                    >
+                                    </div>
+
                                     </div>
                                 </div>
 
@@ -238,7 +245,7 @@ require_once PUBLIC_PATH . '/partials/sidebar.php';
                                             </svg>
                                         </div>
                                         <select name="remind_before_minutes"
-                                                class="pl-10 w-full px-3 sm:px-4 py-2.5 sm:py-3.5 bg-white border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-all duration-200 appearance-none cursor-pointer">
+                                                class="w-full pl-10 pr-3 sm:pr-4 py-2.5 sm:py-3.5 bg-white border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] transition-all duration-200 appearance-none cursor-pointer">
                                             <option value="">Tidak ada pengingat</option>
                                             <option value="5">5 menit sebelum</option>
                                             <option value="10">10 menit sebelum</option>

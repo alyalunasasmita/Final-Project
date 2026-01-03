@@ -181,10 +181,6 @@ $isToday = date('Y-m-d', strtotime($data['tanggal'])) == date('Y-m-d');
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-2 sm:mt-0 text-right">
-                            <p class="text-xs sm:text-sm text-gray-600">ID Jadwal</p>
-                            <p class="text-sm sm:text-lg font-mono font-bold text-[#1F2937]">#<?= $data['id_schedule'] ?></p>
-                        </div>
                     </div>
                 </div>
 
@@ -289,31 +285,7 @@ $isToday = date('Y-m-d', strtotime($data['tanggal'])) == date('Y-m-d');
                             <h3 class="text-sm sm:text-base md:text-lg font-semibold text-[#1F2937]">Pengaturan</h3>
                         </div>
                         <div class="space-y-3 sm:space-y-4">
-                            <div>
-                                <p class="text-xs sm:text-sm text-gray-500 mb-1">Tipe Event</p>
-                                <div class="flex items-center gap-2">
-                                    <div class="p-2 rounded-lg <?= str_replace('bg-', 'bg-', $config['badgeColor']) ?> border <?= str_replace('border-', 'border-', explode(' ', $config['badgeColor'])[2]) ?>">
-                                        <?php if($tipe_event == 'belajar'): ?>
-                                        <svg class="w-4 h-4 text-[#2563EB]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                                        </svg>
-                                        <?php elseif($tipe_event == 'deadline'): ?>
-                                        <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                        <?php elseif($tipe_event == 'ujian'): ?>
-                                        <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                        </svg>
-                                        <?php else: ?>
-                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                        <?php endif; ?>
-                                    </div>
-                                    <span class="font-medium text-sm sm:text-base text-[#1F2937]"><?= ucfirst($tipe_event) ?></span>
-                                </div>
-                            </div>
+                            
                             <div class="pt-3 sm:pt-4 border-t border-gray-100">
                                 <p class="text-xs sm:text-sm text-gray-500 mb-1">Pengingat</p>
                                 <?php if (!empty($data['remind_before_minutes'])): ?>

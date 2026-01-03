@@ -26,8 +26,11 @@ class ChartService
         LEFT JOIN log_belajar lb
             ON m.id_materi = lb.materi_id
             AND lb.users_id = {$userId}
+            AND lb.tanggal >= DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01')
+            AND lb.tanggal <  DATE_ADD(DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01'), INTERVAL 1 MONTH)
         GROUP BY m.id_materi, m.nama_materi
         ORDER BY total_durasi DESC;
+
         ";
 
         return $this->fetchData($sql);

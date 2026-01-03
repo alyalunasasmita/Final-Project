@@ -45,22 +45,15 @@ require_once PUBLIC_PATH . '/partials/header.php';
 require_once PUBLIC_PATH . '/partials/sidebar.php';
 ?>
 
-<!-- WRAPPER UTAMA - Konsisten dengan lihatCatatan.php -->
+
 <div class="min-h-screen bg-[#F9FAFB]">
-    
-    <!-- Desktop: setelah sidebar w-38 (152px) -->
     <div class="md:ml-[152px] lg:ml-[152px] xl:ml-[152px] transition-all duration-300">
-        
-        <!-- Full width container -->
         <div class="w-full">
-            
-            <!-- HEADER SECTION - Konsisten -->
             <div class="w-full px-3 sm:px-4 md:px-6 py-3 sm:py-4 bg-white border-b border-gray-100">
                 <div class="max-w-full">
-                    <!-- Gunakan grid untuk control yang lebih baik -->
                     <div class="w-full grid grid-cols-1 md:grid-cols-2 items-start md:items-center gap-3 sm:gap-4">
                         
-                        <!-- Left Column -->
+                        <!-- kolom kiri -->
                         <div class="w-full md:col-span-1">
                             <div class="flex items-center gap-2 sm:gap-3">
                                 <div class="w-1.5 h-10 bg-gradient-to-b from-[#2563EB] to-[#93C5FD] rounded-full"></div>
@@ -106,11 +99,11 @@ require_once PUBLIC_PATH . '/partials/sidebar.php';
                 </div>
             </div>
 
-            <!-- MAIN CONTENT -->
+            <!-- konten utama -->
             <div class="w-full p-3 sm:p-4 md:p-6">
                 <div class="w-full max-w-full mx-auto">
                     
-                    <!-- Flash Message -->
+                    <!-- tampilan jika belum ada daftar tugas -->
                     <?php if (!empty($flash)): ?>
                     <div class="w-full mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg border <?= $flash['success'] ? 'border-[#10B981]/30 bg-[#10B981]/10' : 'border-red-200 bg-red-50' ?>">
                         <div class="flex items-start">
@@ -141,10 +134,10 @@ require_once PUBLIC_PATH . '/partials/sidebar.php';
                     </div>
                     <?php endif; ?>
 
-                    <!-- Filter & Stats Section -->
+                    <!-- bagian filter tugas dan stats tugas -->
                     <div class="w-full bg-white border border-gray-200 rounded-xl p-3 sm:p-4 md:p-6 mb-4 sm:mb-6">
                         <div class="w-full flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
-                            <!-- Filter Form -->
+                            <!-- form filter tugas-->
                             <form method="GET" action="" class="w-full md:w-auto">
                                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
                                     <div class="relative flex-1">
@@ -185,11 +178,11 @@ require_once PUBLIC_PATH . '/partials/sidebar.php';
                         </div>
                     </div>
 
-                    <!-- Tasks List -->
+                    <!-- daftar tugas -->
                     <div class="w-full">
                         
                         <?php if (empty($tasks)): ?>
-                            <!-- Empty State -->
+                            <!-- kalo filter gada tugasnya -->
                             <div class="w-full text-center py-8 sm:py-12 px-3 sm:px-4">
                                 <div class="relative mb-6">
                                     <div class="w-32 h-32 sm:w-40 sm:h-40 bg-gradient-to-br from-[#93C5FD]/20 to-[#2563EB]/20 rounded-full flex items-center justify-center">
@@ -225,27 +218,15 @@ require_once PUBLIC_PATH . '/partials/sidebar.php';
                                 </a>
                             </div>
                         <?php else: ?>
-                            <!-- Tasks Grid -->
+                            <!-- tampilan daftar tugas -->
                             <div class="w-full mb-6">
-                                <!-- Grid Header -->
-                                <div class="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
-                                    <div>
-                                        <h2 class="text-base sm:text-lg font-semibold text-[#1F2937]">Semua Tugas</h2>
-                                        <p class="text-xs sm:text-sm text-gray-500 mt-0.5">Kelola dan pantau progres tugas Anda</p>
-                                    </div>
-                                    <div class="text-xs sm:text-sm text-gray-500">
-                                        Filter: <span class="font-medium text-[#2563EB]"><?= empty($status) ? 'Semua' : htmlspecialchars($status) ?></span>
-                                    </div>
-                                </div>
-                                
-                                <!-- TASKS GRID -->
                                 <div class="w-full grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                                     <?php foreach ($tasks as $t): 
-                                        // Tentukan status dan warna
+                                        // Tentukan status dan warna 
                                         $statusColor = '';
                                         $statusText = '';
                                         $statusIcon = '';
-                                        
+                                    
                                         switch($t['status']) {
                                             case 'belum progres':
                                                 $statusColor = 'bg-red-50 border-red-100';
@@ -275,7 +256,7 @@ require_once PUBLIC_PATH . '/partials/sidebar.php';
                                         }
                                     ?>
                                     
-                                    <!-- TASK CARD -->
+                                    <!-- kartu daftar tugas -->
                                     <div class="w-full group bg-white border border-gray-100 rounded-lg hover:border-gray-200 transition-all duration-200 flex flex-col h-full">
                                         
                                         <!-- Card Header -->
