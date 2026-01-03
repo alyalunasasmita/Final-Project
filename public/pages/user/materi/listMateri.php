@@ -3,6 +3,7 @@ require_once __DIR__ . '/../../../config.php';
 require_once ROOT_PATH . '/backend/Materi.php';
 require_once ROOT_PATH . '/backend/progresMateri.php';
 require_once ROOT_PATH . '/backend/AuthMiddleware.php';
+require_once ROOT_PATH .'/backend/activityBelajar.php';
 
 
 use App\AuthMiddleware;
@@ -12,15 +13,18 @@ $nama = htmlspecialchars($userData['nama']);
 
 use App\Materi\Materi;
 use App\progres\ProgressMateri;
+use App\LogBelajar;
 
 // INISIALISASI OBJECT
 $materiObj = new Materi();
 $progressObj = new ProgressMateri();
+$logBelajar = new LogBelajar($conn ?? null);
 
 // AMBIL SEMUA DATA MATERI
 $result = $materiObj->lihatMateri();
 $materi_list = $result['data'] ?? [];
 $total_materi = $result['total'] ?? 0;
+$user_id = $userData['id'];
 
 require_once PUBLIC_PATH . '/partials/header.php';
 require_once PUBLIC_PATH . '/partials/sidebar.php';
@@ -43,8 +47,7 @@ require_once PUBLIC_PATH . '/partials/sidebar.php';
                 Daftar Materi Pembelajaran
             </h1>
             <div class="text-gray-600 text-base sm:text-lg">
-                Selamat belajar, 
-                <span class="text-[#2563EB] font-semibold ml-1"><?= $nama ?></span>
+                Pilih Materi Yang Akan Kamu Pelajari Hari Ini!!
             </div>
         </div>
     </div>
@@ -71,12 +74,14 @@ require_once PUBLIC_PATH . '/partials/sidebar.php';
                             </div>
                         </div>
                     <?php else: ?>
-                        <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                        <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 break-word">
                             <?php foreach ($materi_list as $index => $materi): 
                                 $materi_nama = htmlspecialchars($materi['nama_materi'] ?? 'Untitled Course');
                                 $materi_deskripsi = htmlspecialchars($materi['deskripsi_materi'] ?? 'No description available');
                                 $materi_id = $materi['id_materi'] ?? 0;
                                 $materi_kategori = htmlspecialchars($materi['kategori'] ?? 'General');
+                                $isMateriSelesai = $logBelajar->materiSelesai($user_id, $materi_id);
+
                                 
                                 // Generate warna berbeda untuk tiap card menggunakan warna custom
                                 $colors = [
@@ -90,9 +95,18 @@ require_once PUBLIC_PATH . '/partials/sidebar.php';
                                 $color_class = $colors[$index % count($colors)];
                             ?>
                                 <div class="animate-fade-in" style="animation-delay: <?= $index * 50 ?>ms">
-                                    <div class="bg-white rounded-xl sm:rounded-2xl shadow-md hover:shadow-xl border border-gray-100 transition-all duration-300 h-full flex flex-col overflow-hidden">
+                                    <div class="bg-white rounded-xl sm:rounded-2xl shadow-md hover:shadow-xl border border-gray-100 transition-all duration-300 h-full flex flex-col overflow-hidden relative">
+                                        <?php if ($isMateriSelesai): ?>
+                                        <div class="absolute top-3 right-3 z-10">
+                                            <span class="flex items-center gap-1 bg-emerald-100 text-emerald-700
+                                                        text-xs font-semibold px-3 py-1 rounded-full shadow">
+                                            ✓ Selesai
+                                            </span>
+                                        </div>
+                                        <?php endif; ?>
+
                                         <!-- Card Header dengan Gradien -->
-                                        <div class="p-4 sm:p-5 bg-gradient-to-r <?= $color_class ?>">
+                                        <div class="relative p-4 sm:p-5 pr-20 bg-gradient-to-r <?= $color_class ?>">
                                             <div class="flex items-start justify-between">
                                                 <div class="flex-1">
                                                     <div class="flex items-center mb-2">

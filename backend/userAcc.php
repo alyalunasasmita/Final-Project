@@ -31,8 +31,6 @@ class User {
     if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
         return false;
     }
-
-    /* ===== VALIDASI EMAIL & USERNAME (UNIQUE) ===== */
     $check = $this->db->prepare(
         "SELECT id FROM {$this->table}
          WHERE (email = ? OR username = ?)
@@ -54,7 +52,6 @@ class User {
         return false;
     }
 
-    /* ===== UPDATE DATA ===== */
     $stmt = $this->db->prepare(
         "UPDATE {$this->table}
          SET nama = ?, email = ?, username = ?

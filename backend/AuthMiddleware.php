@@ -64,13 +64,12 @@ class AuthMiddleware {
 
     public static function logout(): void {
         $session = self::getSession();
-        $session->logout(); // SessionManager sudah handle semua
+        $session->logout(); 
     }
     
     public static function requireNoAuth(): void {
         $session = self::getSession();
-        
-        // Cek apakah sudah login menggunakan method yang benar
+
         if ($session->isValid()) {
             if ($session->isAdmin()) {
                 header("Location: " . BASE_URL . "pages/admin/dashboardAdmin.php");
@@ -104,7 +103,6 @@ class AuthMiddleware {
         }
     }
     
-    // Helper method untuk mendapatkan data user yang aman
     public static function getUser(): ?array {
         try {
             return self::authUser();
@@ -113,7 +111,6 @@ class AuthMiddleware {
         }
     }
     
-    // Method tambahan untuk mendapatkan data user tanpa auth check
     public static function getUserData(): ?array {
         $session = self::getSession();
         

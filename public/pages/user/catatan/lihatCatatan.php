@@ -42,7 +42,7 @@ require_once PUBLIC_PATH . '/partials/sidebar.php';
                                         Catatan Belajar
                                     </h1>
                                     <p class="text-gray-500 text-xs sm:text-sm mt-0.5">
-                                        Halo, <span class="font-medium text-[#2563EB]"><?= $nama; ?></span>
+                                        buat catatan bebas (free note) kamu disini!!
                                     </p>
                                 </div>
                             </div>

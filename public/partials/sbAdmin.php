@@ -61,8 +61,7 @@
                         </span>
                     </div>
                     <span class="font-medium text-gray-700 font-sans text-sm tracking-wide group-hover:text-blue-700">Dashboard</span>
-                    <span class="ml-auto text-xs bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-700 px-2 py-1 rounded-full border border-blue-200">Admin</span>
-                </a>
+                    </a>
                 
                 <!-- Manage Course/Materi -->
                 <a href="<?php BASE_URL ?>/pages/admin/lihatMateri.php" 
@@ -77,9 +76,8 @@
                             menu_book
                         </span>
                     </div>
-                    <span class="font-medium text-gray-700 font-sans text-sm tracking-wide group-hover:text-purple-700">Manage Courses</span>
-                    <span class="ml-auto text-xs bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 px-2 py-1 rounded-full border border-purple-200 animate-pulse">New</span>
-                </a>
+                    <span class="font-medium text-gray-700 font-sans text-sm tracking-wide group-hover:text-purple-700">Kelola Materi</span>
+                    </a>
             </nav>
         </div>
 
@@ -189,12 +187,12 @@
                 </div>
                 <span class="font-medium text-gray-700 font-sans text-sm">Dashboard</span>
             </a>
-            <a href="<?php BASE_URL?>pages/admin/listMateri.php" 
+            <a href="<?php BASE_URL ?>/pages/admin/lihatMateri.php" 
                class="flex items-center gap-3 p-3 rounded-xl bg-white border border-gray-100 shadow-sm group">
                 <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-gradient-to-br from-purple-100 to-pink-100">
                     <span class="material-icons text-sm text-purple-600">menu_book</span>
                 </div>
-                <span class="font-medium text-gray-700 font-sans text-sm">Courses</span>
+                <span class="font-medium text-gray-700 font-sans text-sm">Materi</span>
             </a>
         </nav>
     </div>

@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return res.json();
   };
 
-  // Biar chart ga numpuk kalau di-render ulang
   const charts = {};
 
   // Helper: format durasi (kalau datamu menit, hasilnya jadi "1j 20m")
@@ -28,8 +27,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const values = Array(7).fill(0);
 
     for (const x of data) {
-      const idx = getDayIndexSenin0(x.hari); // 🔥 ganti kalau field-nya bukan "tanggal"
-      values[idx] += Number(x.total_durasi) || 0; // total_durasi sudah JAM
+      const idx = getDayIndexSenin0(x.hari); 
+      values[idx] += Number(x.total_durasi) || 0;
     }
 
     return { labels: LABELS_HARI, values };

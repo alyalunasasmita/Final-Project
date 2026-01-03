@@ -82,9 +82,6 @@ class Submateri
         return $ok;
     }
 
-    /**
-     * SOFT DELETE submateri (bukan delete permanen)
-     */
     public function deleteSubmateri(int $id): bool
     {
         $stmt = $this->db->prepare(
@@ -99,9 +96,6 @@ class Submateri
         return $ok;
     }
 
-    // =========================
-    // Navigasi submateri_detail
-    // =========================
 
     private function getUrutanById(int $id): ?int
     {
@@ -211,7 +205,6 @@ class Submateri
 
         $currentUrutan = (int)$result['current']['urutan'];
 
-        // total & posisi (aktif saja + materi aktif)
         $stmt = $this->db->prepare("
             SELECT 
                 COUNT(*) as total,

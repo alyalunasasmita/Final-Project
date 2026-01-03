@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/../../config.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -25,7 +26,7 @@ if (isset($_SESSION['otp_expiry']) && time() > $_SESSION['otp_expiry']) {
 
 $email = $_SESSION['reset_email'];
 
-require_once __DIR__ . '/../assets/layout/header.php';
+require_once PUBLIC_PATH . '/partials/header.php';
 ?>
 
   <title>Verifikasi OTP - Konfirmasi Kode Keamanan</title>

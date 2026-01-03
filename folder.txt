@@ -1,0 +1,26 @@
+
+
+
+
+
+project-root/
+├── backend/
+│   ├── API/
+│   ├── cron/
+│   ├── service/
+│   ├── activity.php
+│   ├── activityBelajar.php
+│   └── analytic.php
+│
+├── config/
+│
+├── public/
+│   ├── api/
+│   ├── assets/
+│   ├── pages/
+│   ├── partials/
+│   ├── config.php
+│   └── index.php
+│
+├── vendor/
+└── .gitignore

@@ -17,15 +17,15 @@ final class LaporanBelajarCsvExporter
 
         $insight = $this->repo->getInsight($userId, $start, $end);
 
-        fputcsv($fh, ['RINGKASAN_NARASI', 'Keterangan']);
+        fputcsv($fh, ['', 'Keterangan']);
         $totalJam  = $insight['Total Jam'] ?? 0;
         $totalSesi = $insight['Total Sesi'] ?? 0;
         $hariTop   = $insight['Hari Terproduktif'] ?? '-';
         $jamFav    = $insight['Jam Favorit Mulai'] ?? '-';
 
-        fputcsv($fh, ['RINGKASAN_NARASI', "Kamu telah belajar {$totalJam} jam dari {$totalSesi} sesi belajar."]);
-        if ($hariTop !== '-') fputcsv($fh, ['RINGKASAN_NARASI', "Hari paling produktif kamu adalah {$hariTop}."]);
-        if ($jamFav !== '-') fputcsv($fh, ['RINGKASAN_NARASI', "Kamu paling sering memulai belajar pada pukul {$jamFav}."]);
+        fputcsv($fh, ['', "Kamu telah belajar {$totalJam} jam dari {$totalSesi} sesi belajar."]);
+        if ($hariTop !== '-') fputcsv($fh, ['', "Hari paling produktif kamu adalah {$hariTop}."]);
+        if ($jamFav !== '-') fputcsv($fh, ['', "Kamu paling sering memulai belajar pada pukul {$jamFav}."]);
         fputcsv($fh, []);
 
         // ===== INSIGHT (angka) =====

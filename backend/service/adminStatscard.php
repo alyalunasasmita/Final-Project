@@ -28,26 +28,24 @@ class DashboardCards
     }
 
     public function cardTotalUsers(): array
-{
-    $resTotal = $this->db->query("SELECT COUNT(*) AS total FROM users");
-    $rowTotal = $resTotal ? $resTotal->fetch_assoc() : ['total' => 0];
+    {
+        $resTotal = $this->db->query("SELECT COUNT(*) AS total FROM users");
+        $rowTotal = $resTotal ? $resTotal->fetch_assoc() : ['total' => 0];
 
-    $resNew = $this->db->query("
-        SELECT COUNT(*) AS new_week
-        FROM users
-        WHERE create_time >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-    ");
-    $rowNew = $resNew ? $resNew->fetch_assoc() : ['new_week' => 0];
+        $resNew = $this->db->query("
+            SELECT COUNT(*) AS new_week
+            FROM users
+            WHERE create_time >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+        ");
+        $rowNew = $resNew ? $resNew->fetch_assoc() : ['new_week' => 0];
 
-    return [
-        'title' => 'Total Users',
-        'value' => (int)$rowTotal['total'],
-        'meta'  => '+' . (int)$rowNew['new_week'] . ' this week'
-    ];
-}
+        return [
+            'title' => 'Total Users',
+            'value' => (int)$rowTotal['total'],
+            'meta'  => '+' . (int)$rowNew['new_week'] . ' this week'
+        ];
+    }
 
-
-    /** CARD 3: Active Sessions (log belajar yang belum selesai) */
     public function cardActiveSessions(): array
     {
         $sql = "SELECT COUNT(*) AS total
@@ -63,10 +61,6 @@ class DashboardCards
         ];
     }
 
-    /**
-     * CARD 4: Completion Rate (admin-friendly)
-     * Definisi: (jumlah sesi selesai) / (total sesi) * 100
-     */
     public function cardCompletionRate(): array
     {
         $sql = "
@@ -86,7 +80,7 @@ class DashboardCards
         return [
             'title' => 'Completion Rate',
             'value' => $rate . '%',
-            'meta'  => null, // kalau mau "+5% this month" nanti aku bikinin versi bulan ini vs bulan lalu
+            'meta'  => null,
         ];
     }
 }

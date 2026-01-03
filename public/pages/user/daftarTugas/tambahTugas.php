@@ -217,7 +217,7 @@ unset($_SESSION['flash']);
                                             </span>
                                         </label>
                                         <div class="relative">
-                                            <input type="text" 
+                                            <input type="date" 
                                                    name="deadline"
                                                    class="w-full pl-3 sm:pl-4 pr-10 py-2.5 sm:py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2563EB] focus:border-[#2563EB] focus:outline-none transition-colors text-sm sm:text-base"
                                                    placeholder="Format: 2025-12-25 23:59:00">

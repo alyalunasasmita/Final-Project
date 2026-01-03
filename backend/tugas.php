@@ -58,9 +58,7 @@ class Tugas
         return $errors;
     }
 
-    /**
-     * CREATE
-     */
+   
     public function tambahTugas(
         string $title,
         ?string $description,
@@ -101,9 +99,7 @@ class Tugas
         ];
     }
 
-    /**
-     * READ (list semua tugas user), optional filter status
-     */
+    
     public function listTugas(?string $status = null): array
     {
         if (!$this->isUserValid()) {
@@ -146,9 +142,7 @@ class Tugas
         return ["success" => true, "message" => "OK", "data" => $rows];
     }
 
-    /**
-     * READ (get by id)
-     */
+  
     public function getTugasById(int $idCatatan): array
     {
         if (!$this->isUserValid()) {
@@ -186,9 +180,7 @@ class Tugas
         return ["success" => true, "message" => "OK", "data" => $row];
     }
 
-    /**
-     * UPDATE
-     */
+   
     public function updateTugas(
         int $idCatatan,
         string $title,
@@ -235,9 +227,6 @@ class Tugas
         return ["success" => true, "message" => "Tugas berhasil diupdate"];
     }
 
-    /**
-     * DELETE
-     */
     public function deleteTugas(int $idCatatan): array
     {
         if (!$this->isUserValid()) {

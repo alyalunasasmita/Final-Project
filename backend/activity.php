@@ -2,7 +2,7 @@
 namespace App\activity; 
 
 require_once __DIR__.'/../config/nyambung.php'; 
-use App\Database\Database;
+use App\database\Database;
 
 class Activity {
     private $db; 

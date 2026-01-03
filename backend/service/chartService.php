@@ -49,22 +49,6 @@ class ChartService
         return $this->fetchData($sql);
     }
 
-    public function getDurasiBulanan($userId)
-    {
-        $sql = "
-        SELECT 
-            DATE(tanggal) AS hari,
-            COALESCE(SUM(durasi), 0) AS total_durasi
-        FROM log_belajar
-        WHERE users_id = {$userId}
-          AND tanggal >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-        GROUP BY DATE(tanggal)
-        ORDER BY hari;
-        ";
-
-        return $this->fetchData($sql);
-    }
-
     private function fetchData($sql)
     {
         $result = $this->db->query($sql);

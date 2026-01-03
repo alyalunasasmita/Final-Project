@@ -4,20 +4,25 @@ require_once ROOT_PATH . '/backend/api/ytSearch.php';
 require_once ROOT_PATH . '/backend/materi.php';
 require_once ROOT_PATH . '/backend/submateri.php';
 require_once ROOT_PATH . '/backend/AuthMiddleware.php';
+require_once ROOT_PATH . '/backend/activitybelajar.php';
+
 
 use App\Materi\Materi;
 use App\submateri\Submateri;
 use App\Service\YouTubeSearchService;
 use App\AuthMiddleware;
+use App\LogBelajar;
 
 AuthMiddleware::authUser();
 
 $materiId = (int)($_GET['id'] ?? 0);
 if ($materiId <= 0) die('Invalid materi');
 
+
 $materiObj = new Materi();
 $subObj = new Submateri();
 $yt = new YouTubeSearchService();
+$logBljr = new LogBelajar($conn ?? null);
 
 $materi = $materiObj->getMateriById($materiId)['data'] ?? [];
 $submateri = $subObj->lihatSubmateriByMateri($materiId);
@@ -43,6 +48,12 @@ if (!empty($keyword)) {
         error_log('YouTube API error: ' . $e->getMessage());
         $videos = [];
     }
+
+    $openedSubmateri = [];
+    foreach ($submateri as $s) {
+    $openedSubmateri[$s['id_subMateri']] =
+        $logBljr->materisudahdibuka($_SESSION['user_id'], $s['id_subMateri']);
+}
 }
 require_once PUBLIC_PATH . '/partials/header.php';
 
@@ -137,16 +148,34 @@ require_once PUBLIC_PATH . '/partials/header.php';
     <?php else: ?>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <?php foreach ($submateri as $index => $s): ?>
-          <div class="bg-gradient-to-br from-white to-gray-50 rounded-xl p-5 border border-gray-200 card-hover transition-all duration-300">
+          <?php
+            $isDone = $logBljr->submateriSelesai(
+                $_SESSION['user_id'],
+                $s['id_subMateri']
+            );
+          ?>
+          <div class="  relative bg-gradient-to-br from-white to-gray-50 rounded-xl p-5 border border-gray-200 card-hover transition-all duration-300">
             <div class="flex items-start justify-between">
               <div class="flex-1">
                 <div class="flex items-center mb-3">
-                  <div class="w-8 h-8 flex items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-bold text-sm mr-3">
+                  <div class="flex items-center">
+                  <div class="w-8 h-8 flex items-center justify-center rounded-full 
+                      <?= $isDone ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-600' ?> 
+                      font-bold text-sm mr-2">
                     <?= $index + 1 ?>
                   </div>
-                  <h3 class="text-lg font-semibold text-gray-800">
+
+      
+
+                  <h3 class="text-lg font-semibold text-gray-800 pr-20 leading-snug break-word">
                     <?= htmlspecialchars($s['nama_subMateri'] ?? 'Submateri') ?>
                   </h3>
+                </div>
+                 <?php if ($isDone): ?>
+                    <span class=" absolute top-3 right-3 px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">
+                      Selesai
+                    </span>
+                  <?php endif; ?>
                 </div>
                 <div class="ml-11">
                   <div class="flex items-center space-x-4">
@@ -188,7 +217,6 @@ require_once PUBLIC_PATH . '/partials/header.php';
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
         </svg>
         <p class="text-gray-600 mb-3">Tidak ada rekomendasi video untuk "<?= htmlspecialchars($keyword) ?>".</p>
-        <p class="text-sm text-gray-500">Coba cari manual di YouTube dengan keyword di atas.</p>
       </div>
     <?php else: ?>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -175,7 +175,7 @@ require_once PUBLIC_PATH . '/partials/header.php';
 
                 <!-- Footer -->
                 <div class="mt-6 text-center text-sm text-gray-500">
-                    <p>© 2024 StudyYou. All rights reserved.</p>
+                    <p>© 2025 StudyYou.</p>
                 </div>
             </div>
         </div>

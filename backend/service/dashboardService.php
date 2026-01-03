@@ -12,9 +12,7 @@ class DashboardService {
         $this->db = $database->db;
     }
 
-    /**
-     * Ringkasan statistik dashboard
-     */
+
     public function getSummary($userId) {
         $sql = "
         SELECT id_schedule, nama_schedule, deskripsi, tanggal, jam_mulai, jam_selesai, durasi
@@ -35,9 +33,6 @@ class DashboardService {
         return $stmt->get_result()->fetch_assoc();
     }
 
-    /**
-     * Materi terakhir dipelajari
-     */
     public function getLastStudiedMaterial($userId) {
         $sql = "
             SELECT materi.nama_materi
@@ -59,9 +54,6 @@ class DashboardService {
         return $stmt->get_result()->fetch_assoc();
     }
 
-    /**
-     * Deadline terdekat
-     */
     public function deadline($userId, $limit = 3) {
         $sql = "
             SELECT id_catatan, title, description, status, deadline

@@ -1,19 +1,17 @@
 <?php
-// logout_simple.php
+require_once __DIR__ .'/../../config.php';
+require_once ROOT_PATH .'/backend/AuthMiddleware.php';
 
-// 1. Handle session
-session_start();
-session_unset();
-session_destroy();
+use App\AuthMiddleware;
 
-// 2. Delete session cookie
-if (isset($_COOKIE[session_name()])) {
-    setcookie(session_name(), '', time() - 3600, '/');
-}
-
-// 3. Delete other cookies if any
-if (isset($_COOKIE['remember_me'])) {
-    setcookie('remember_me', '', time() - 3600, '/');
+/**
+ * Jika request AJAX (dari JS) -> jalankan logout saja, tanpa render HTML
+ */
+if (isset($_GET['action']) && $_GET['action'] === 'do_logout') {
+    AuthMiddleware::logout();       // PENTING: logout() jangan redirect/exit
+    http_response_code(200);
+    echo "OK";
+    exit;
 }
 ?>
 <!DOCTYPE html>
@@ -38,7 +36,7 @@ if (isset($_COOKIE['remember_me'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Logout - StudyYou</title>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+    <body class="bg-gray-50 min-h-screen flex flex-col">
     <!-- Header Mobile -->
     <div class="lg:hidden bg-white shadow-sm border-b border-gray-200 p-4">
         <div class="flex items-center justify-center">
@@ -104,20 +102,23 @@ if (isset($_COOKIE['remember_me'])) {
         </div>
     </div>
 
-    <!-- Bottom spacing untuk mobile -->
-    <div class="h-4 lg:hidden"></div>
-
     <script>
-        // Start progress bar animation
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             const progressBar = document.getElementById('progressBar');
-            
-            // Animate progress bar to 100% in 1.2 seconds
+
+            // animasi bar
             setTimeout(() => {
                 progressBar.style.width = '100%';
             }, 10);
-            
-            // Redirect after 1.2 seconds
+
+            // panggil endpoint logout di file yang sama (AJAX)
+            try {
+                await fetch('logout.php?action=do_logout', { method: 'POST' });
+            } catch (e) {
+                console.log('Gagal logout:', e);
+            }
+
+            // redirect setelah 1.2 detik
             setTimeout(() => {
                 window.location.href = "login.php";
             }, 1200);

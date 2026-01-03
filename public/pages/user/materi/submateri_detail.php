@@ -14,6 +14,7 @@ require_once PUBLIC_PATH . '/partials/header.php';
 
 use App\submateri\Submateri;
 use App\progres\ProgressMateri;
+use App\LogBelajar;
 
 // get ids
 $id_submateri = isset($_GET['id']) ? (int)$_GET['id'] : 0;

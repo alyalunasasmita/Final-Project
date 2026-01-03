@@ -38,7 +38,7 @@ require_once PUBLIC_PATH . '/partials/sidebar.php';
             <h1 class="text-xl sm:text-2xl font-semibold text-[#1F2937]">Jadwal Saya</h1>
             <div class="flex items-center gap-2 mt-0.5">
                 <div class="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse"></div>
-                <p class="text-gray-500 text-xs sm:text-sm">Manage study time effectively</p>
+                <p class="text-gray-500 text-xs sm:text-sm">Atur Jadwal Belajar Kamu Sendiri</p>
             </div>
         </div>
     </div>

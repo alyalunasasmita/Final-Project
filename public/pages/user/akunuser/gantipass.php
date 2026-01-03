@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         AuthMiddleware::logCRUD('update', 'password', $userAuth['id']);
         AuthMiddleware::logout();
 
-        header("Location: login.php?msg=password_changed");
+        header("Location: " . BASE_URL . "pages/auth/login.php?msg=password_changed");
         exit;
     } else {
         header("Location: gantipass.php?error=wrong_old");

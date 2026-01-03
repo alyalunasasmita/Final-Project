@@ -39,15 +39,12 @@ class SessionManager {
             session_start();
         }
         
-        // Clear all session variables
         $_SESSION = array();
         
-        // Destroy the session
         if (session_id()) {
             session_destroy();
         }
         
-        // Delete the session cookie
         if (ini_get("session.use_cookies")) {
             $params = session_get_cookie_params();
             setcookie(
@@ -61,9 +58,7 @@ class SessionManager {
             );
         }
         
-        // Redirect to login page
-        header("Location: " . BASE_URL . "pages/auth/login.php");
-        exit;
+        
     }
 
     public function isUser(): bool {

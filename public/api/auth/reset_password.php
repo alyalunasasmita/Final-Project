@@ -38,7 +38,6 @@ $service = new PasswordResetService();
 $result = $service->resetPasswordFinal($email, $password);
 
 if ($result['success']) {
-  // bersihin session reset
   unset($_SESSION['reset_email'], $_SESSION['otp_verified']);
   echo json_encode(['success' => true, 'message' => 'Password berhasil direset']);
 } else {
