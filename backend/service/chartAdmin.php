@@ -1,4 +1,5 @@
 <?php
+//chart dashboard admin
 namespace App\Dashboard;
 require_once __DIR__ . '/../../config/nyambung.php';
 use App\database\Database;
@@ -6,7 +7,7 @@ use App\database\Database;
 class DashboardAnalytics
 {
     private $db;
-
+    
     public function __construct()
     {
         $this->db = (new Database())->db;

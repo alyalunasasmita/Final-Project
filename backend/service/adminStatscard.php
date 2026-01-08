@@ -1,4 +1,5 @@
 <?php
+//stats card admin untuk dashboard 
 namespace App\Dashboard;
 require_once __DIR__ . '/../../config/nyambung.php';
 use App\database\Database;
@@ -12,6 +13,7 @@ class DashboardCards
         $this->db = (new Database())->db;
     }
 
+    //materi aktif
     public function cardTotalMateriAktif(): array
     {
         $sql = "SELECT COUNT(*) AS total
@@ -27,6 +29,7 @@ class DashboardCards
         ];
     }
 
+    //total pengguna
     public function cardTotalUsers(): array
     {
         $resTotal = $this->db->query("SELECT COUNT(*) AS total FROM users");
@@ -46,6 +49,7 @@ class DashboardCards
         ];
     }
 
+    //user yang aktif dalam sesi
     public function cardActiveSessions(): array
     {
         $sql = "SELECT COUNT(*) AS total
@@ -61,6 +65,7 @@ class DashboardCards
         ];
     }
 
+    //sesi materi yang selesai
     public function cardCompletionRate(): array
     {
         $sql = "

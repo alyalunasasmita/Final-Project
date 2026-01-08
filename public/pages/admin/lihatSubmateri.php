@@ -236,6 +236,11 @@ require_once PUBLIC_PATH . '/partials/sbAdmin.php';
                                         <span class="material-icons text-base">delete</span>
                                         <span class="font-medium">Hapus</span>
                                     </a>
+                                    <a id="quizLink"
+                                        class="group inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-50 to-purple-50 hover:from-indigo-100 hover:to-purple-100 border border-indigo-300 hover:border-indigo-400 text-indigo-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
+                                            <span class="material-icons text-base">quiz</span>
+                                            <span class="font-medium">Kelola Quiz</span>
+                                    </a>
                                 </div>
                             </div>
 
@@ -259,6 +264,12 @@ require_once PUBLIC_PATH . '/partials/sbAdmin.php';
                                             <span class="material-icons">delete_forever</span>
                                             hapus submateri
                                         </a>
+                                        <a id="quizLink2"
+                                            class="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition-all duration-300">
+                                                <span class="material-icons">quiz</span>
+                                                Kelola Quiz
+                                        </a>
+
                                     </div>
                                 </div>
                             </div>
@@ -327,6 +338,10 @@ function showDetail(title, body, idSub, index) {
         "updateSubmateri.php?id=" + idSub + "&materi=<?= $materiId ?>";
     document.getElementById('hapusLink2').href = 
         "hapusSubmateri.php?id=" + idSub + "&materi=<?= $materiId ?>";
+    document.getElementById('quizLink').href =
+        "quizList.php?submateri_id=" + idSub;
+    document.getElementById('quizLink2').href =
+        "quizList.php?submateri_id=" + idSub;
     
     // Animate panel
     panel.classList.remove('opacity-0', 'translate-x-8');

@@ -1,4 +1,5 @@
 <?php
+//informasi dan RUD acc user 
 namespace App;
 
 use App\Database\Database;
@@ -12,7 +13,7 @@ class User {
         $this->db = $database->db;
     }
 
-    /* ===== READ akun sendiri ===== */
+    ///Lihat Informasi Akun
     public function getById(int $id): ?array {
         $stmt = $this->db->prepare(
             "SELECT id, nama, email, username, create_time
@@ -27,7 +28,7 @@ class User {
 
     public function updateById(array $data): bool {
 
-    /* ===== VALIDASI FORMAT EMAIL ===== */
+    //validasi format email
     if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
         return false;
     }
@@ -71,7 +72,7 @@ class User {
 
 
 
-    /* ===== DELETE akun sendiri ===== */
+    ///hapus akun
     public function deleteById(int $id): bool {
         $stmt = $this->db->prepare(
             "DELETE FROM {$this->table} WHERE id = ?"
@@ -80,6 +81,7 @@ class User {
         return $stmt->execute();
     }
 
+    //update password
     public function updatePassword(int $userId, string $oldPass, string $newPass): bool {
 
     // ambil password lama

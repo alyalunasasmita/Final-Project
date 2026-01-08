@@ -1,4 +1,5 @@
 <?php
+//chart untuk user pada dashboard
 namespace app;
 
 require_once __DIR__ . '/../../config/nyambung.php'; 

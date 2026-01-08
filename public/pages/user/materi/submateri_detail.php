@@ -222,7 +222,7 @@ if (method_exists($progressObj, 'markSubmateriOpened')) {
                 </svg>
             </a>
         <?php else: ?>
-            <a href="materi_detail.php?id=<?= $id_materi ?>" 
+            <a href="materi_detail.php?id=<?= $id_materi ?>" id="btnFinishMateri" 
                class="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-medium rounded-xl hover:shadow-md transition-all duration-200">
                 Selesaikan Materi
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -231,17 +231,227 @@ if (method_exists($progressObj, 'markSubmateriOpened')) {
             </a>
         <?php endif; ?>
     </div>
+
+    <!-- QUIZ MODAL -->
+<div id="quizModal" class="hidden fixed inset-0 bg-black/50 z-[9999] items-center justify-center">
+  <div class="bg-white w-full max-w-2xl rounded-2xl shadow-xl p-6 mx-4">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h3 class="text-xl font-bold text-gray-800">Quick Quiz</h3>
+        <p class="text-sm text-gray-500">Cek pemahaman kamu dulu (±30 detik).</p>
+      </div>
+      <button id="quizClose" class="px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700">Tutup</button>
+    </div>
+
+    <div id="quizBody" class="mt-5"></div>
+
+    <div class="mt-6 flex justify-end gap-2">
+      <button id="quizSubmit" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium">
+        Submit
+      </button>
+      
+    </div>
+  </div>
+</div>
+
     
 </div>
 
 <script>
+/* =======================
+   QUIZ 3 soal step-by-step
+   ======================= */
+const QUIZ = {
+  attemptId: null,
+  questions: [],
+  index: 0,
+  openedOnce: false
+};
+
+const redirectUrl = `materi_detail.php?id=<?= (int)$id_materi ?>`;
+const SUB_ID = <?= (int)$id_submateri ?>;
+
+function showQuizModal() {
+  const m = document.getElementById('quizModal');
+  if (!m) return;
+  m.classList.remove('hidden');
+  m.classList.add('flex');
+}
+
+function hideQuizModal() {
+  const m = document.getElementById('quizModal');
+  if (!m) return;
+  m.classList.add('hidden');
+  m.classList.remove('flex');
+}
+
+function finishQuiz() {
+  // hide submit biar ga bisa dipencet pas selesai
+  const btn = document.getElementById('quizSubmit');
+  if (btn) btn.style.display = 'none';
+
+  // reset supaya kalau balik lagi bisa buka quiz lagi
+  QUIZ.openedOnce = false;
+
+  hideQuizModal();
+  window.location.href = redirectUrl;
+}
+
+document.getElementById('quizClose')?.addEventListener('click', () => {
+  finishQuiz(); // close = langsung balik ke materi detail
+});
+
+function escapeHtml(str){
+  return String(str ?? '').replace(/[&<>"']/g, s => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+  }[s]));
+}
+
+function renderQuestion() {
+  const q = QUIZ.questions[QUIZ.index];
+
+  // kalau sudah habis (setelah soal ke-3)
+  if (!q) {
+    finishQuiz();
+    return;
+  }
+
+  const body = document.getElementById('quizBody');
+  if (!body) return;
+
+  body.innerHTML = `
+    <div class="mb-2 text-sm text-gray-500">Soal ${QUIZ.index + 1} dari ${QUIZ.questions.length}</div>
+    <div class="mb-4">
+      <div class="font-semibold text-gray-800">${escapeHtml(q.question)}</div>
+    </div>
+    <div class="space-y-2">
+      ${(q.options || []).map(o => `
+        <label class="flex items-center gap-2 p-2 rounded-lg border hover:bg-gray-50 cursor-pointer">
+          <input type="radio" name="quizOpt" value="${o.id}">
+          <span class="text-gray-700">${escapeHtml(o.option_text)}</span>
+        </label>
+      `).join('')}
+    </div>
+    <div id="quizResult" class="mt-4"></div>
+  `;
+
+  // pastiin submit muncul kalau memang ada soal
+  const btn = document.getElementById('quizSubmit');
+  if (btn) btn.style.display = 'inline-flex';
+}
+
+async function openQuiz() {
+  try {
+    if (QUIZ.openedOnce) return;
+    QUIZ.openedOnce = true;
+
+    const res = await fetch(`/api/quiz/quizStart.php?submateri_id=${SUB_ID}`);
+    const data = await res.json();
+
+    QUIZ.attemptId = data.attempt_id ?? null;
+    QUIZ.questions = data.questions || [];
+    QUIZ.index = 0;
+
+    // kalau ga ada soal sama sekali
+    if (QUIZ.questions.length === 0) {
+      const body = document.getElementById('quizBody');
+      if (body) {
+        body.innerHTML = `
+          <div class="p-4 rounded-xl bg-yellow-50 border border-yellow-200 text-yellow-800">
+            <div class="font-bold">Quiz belum tersedia</div>
+            <div class="text-sm mt-1">Belum ada soal aktif untuk materi ini.</div>
+          </div>
+        `;
+      }
+      const btn = document.getElementById('quizSubmit');
+      if (btn) btn.style.display = 'none';
+
+      showQuizModal();
+      return;
+    }
+
+    renderQuestion();
+    showQuizModal();
+
+  } catch (e) {
+    console.error('openQuiz error', e);
+    QUIZ.openedOnce = false;
+  }
+}
+
+document.getElementById('quizSubmit')?.addEventListener('click', async () => {
+  try {
+    const picked = document.querySelector('input[name="quizOpt"]:checked');
+    if (!picked) {
+      alert('Pilih jawaban dulu ya');
+      return;
+    }
+
+    const currentQ = QUIZ.questions[QUIZ.index];
+    if (!currentQ) {
+      finishQuiz();
+      return;
+    }
+
+    // disable submit biar ga double click
+    const btn = document.getElementById('quizSubmit');
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.add('opacity-60','cursor-not-allowed');
+    }
+
+    const res = await fetch('/api/quiz/quizSubmit.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        attempt_id: QUIZ.attemptId,
+        question_id: parseInt(currentQ.id),
+        selected_option_id: parseInt(picked.value)
+      })
+    });
+
+    const result = await res.json();
+
+    const out = document.getElementById('quizResult');
+    if (out) {
+      out.innerHTML = `
+        <div class="p-3 rounded-xl ${result.is_correct ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">
+          <div class="font-bold">${result.is_correct ? '✅ Benar!' : '❌ Salah'}</div>
+          <div class="text-sm mt-1">${escapeHtml(result.explanation || '')}</div>
+        </div>
+      `;
+    }
+
+    // next question (delay biar user lihat hasil)
+    setTimeout(() => {
+      QUIZ.index++;
+      renderQuestion();
+
+      // enable submit lagi kalau masih ada soal
+      if (btn) {
+        btn.disabled = false;
+        btn.classList.remove('opacity-60','cursor-not-allowed');
+      }
+    }, 900);
+
+  } catch (e) {
+    console.error('submitQuiz error', e);
+    const btn = document.getElementById('quizSubmit');
+    if (btn) {
+      btn.disabled = false;
+      btn.classList.remove('opacity-60','cursor-not-allowed');
+    }
+  }
+});
+
+/* =======================
+   AUTO LOG BELAJAR (punyamu)
+   ======================= */
 const auto = (function(){
-  // state
   let currentLogId = window.currentLogId || null;
   const MATERI_ID = <?= (int)$id_materi ?>;
-  const SUB_ID = <?= (int)$id_submateri ?>;
+  const SUB_ID_LOCAL = <?= (int)$id_submateri ?>;
 
-  // minimal post helper (returns parsed json or throws)
   async function postJson(url, data) {
     const body = new URLSearchParams(data).toString();
     const res = await fetch(url, {
@@ -254,19 +464,15 @@ const auto = (function(){
     catch (e) { throw new Error('Non-JSON response from ' + url + ': ' + text.slice(0,200)); }
   }
 
-  // use global startLearning if exists, else local
-  async function startLearningLocal(subId = SUB_ID) {
+  async function startLearningLocal(subId = SUB_ID_LOCAL) {
     try {
       const j = await postJson('/api/log/start_log.php', { materi_id: MATERI_ID, submateri_id: subId });
       if (j.success) {
         currentLogId = j.log_id;
         window.currentLogId = currentLogId;
-        console.info('Auto-start OK', currentLogId);
         return currentLogId;
-      } else {
-        console.warn('start_log returned not success', j);
-        return null;
       }
+      return null;
     } catch (err) {
       console.error('startLearningLocal error', err);
       return null;
@@ -278,29 +484,24 @@ const auto = (function(){
     try {
       const j = await postJson('/api/log/end_log.php', { log_id: currentLogId });
       if (j.success) {
-        console.info('Auto-end OK', currentLogId);
         currentLogId = null;
         window.currentLogId = null;
         return true;
-      } else {
-        console.warn('end_log returned not success', j);
-        return false;
       }
+      return false;
     } catch (err) {
       console.error('endLearningLocal error', err);
       return false;
     }
   }
 
-  // Decide which to call (prefer existing functions if defined)
   async function startLearningWrapper(subId) {
     if (typeof window.startLearning === 'function') {
       try {
         await window.startLearning(subId);
-        // assume that startLearning sets window.currentLogId
         currentLogId = window.currentLogId || currentLogId;
         return currentLogId;
-      } catch (e) { console.warn('global startLearning failed, fallback', e); }
+      } catch (e) {}
     }
     return startLearningLocal(subId);
   }
@@ -311,27 +512,27 @@ const auto = (function(){
         await window.endLearning();
         currentLogId = window.currentLogId || null;
         return true;
-      } catch (e) { console.warn('global endLearning failed, fallback', e); }
+      } catch (e) {}
     }
     return endLearningLocal();
   }
 
-  /* ---------- Auto behaviors ---------- */
-
-  // 1) Auto-start on page load (DOMContentLoaded)
-  document.addEventListener('DOMContentLoaded', function() {
-    // If there's already a log id in session (server might have set it), reuse it
-    if (window.currentLogId) {
-      currentLogId = window.currentLogId;
-      console.info('Using existing currentLogId from window:', currentLogId);
-      return;
-    }
-
-    // Otherwise start automatically
-    startLearningWrapper(SUB_ID).catch(()=>{});
+  // tombol selesai materi => end log => buka quiz
+  document.getElementById('btnFinishMateri')?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    await endLearningWrapper();
+    QUIZ.openedOnce = false;
+    openQuiz();
   });
 
-  // 2) Auto-end before navigation on Prev/Next links
+  document.addEventListener('DOMContentLoaded', function() {
+    if (window.currentLogId) {
+      currentLogId = window.currentLogId;
+      return;
+    }
+    startLearningWrapper(SUB_ID_LOCAL).catch(()=>{});
+  });
+
   function interceptLink(idSelector) {
     const el = document.getElementById(idSelector);
     if (!el) return;
@@ -342,88 +543,23 @@ const auto = (function(){
       endLearningWrapper().finally(() => { window.location.href = href; });
     });
   }
-  
   interceptLink('linkPrev');
   interceptLink('linkNext');
 
-  // 3) Keyboard navigation
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'ArrowLeft' && <?= $previous ? 'true' : 'false' ?>) {
-      if (currentLogId) { 
-        e.preventDefault(); 
-        endLearningWrapper().finally(()=> { 
-          window.location.href = 'submateri_detail.php?id=<?= $previous ?>&materi_id=<?= $id_materi ?>'; 
-        }); 
-      }
-    }
-    if (e.key === 'ArrowRight' && <?= $next ? 'true' : 'false' ?>) {
-      if (currentLogId) { 
-        e.preventDefault(); 
-        endLearningWrapper().finally(()=> { 
-          window.location.href = 'submateri_detail.php?id=<?= $next ?>&materi_id=<?= $id_materi ?>'; 
-        }); 
-      }
-    }
-    if (e.key === 'Escape') {
-      if (currentLogId) { 
-        e.preventDefault(); 
-        endLearningWrapper().finally(()=> { 
-          window.location.href = 'materi_detail.php?id=<?= $id_materi ?>'; 
-        }); 
-      }
-    }
-  });
-
-  // 4) beforeunload fallback (best-effort) using Beacon API
   window.addEventListener('beforeunload', function() {
     if (!currentLogId) return;
     try {
       const data = new URLSearchParams({ log_id: currentLogId });
       navigator.sendBeacon('/api/log/end_log.php', data);
-    } catch (e) { /* ignore */ }
+    } catch (e) {}
   });
 
-  // 5) Auto-end when user scrolls to bottom
-  (function bottomAutoEnd(){
-    const MIN_STAY_MS = 4000;
-    let bottomTimer = null;
-    const threshold = 0.90;
-
-    function onScroll() {
-      const pos = window.scrollY;
-      const wh = window.innerHeight;
-      const dh = document.body.scrollHeight;
-      const pct = (pos / (dh - wh));
-      if (pct >= threshold) {
-        if (!bottomTimer) {
-          bottomTimer = setTimeout(async () => {
-            bottomTimer = null;
-            if (currentLogId) {
-              console.info('Reached bottom and stayed - auto ending session');
-              await endLearningWrapper();
-              // Notification
-              const t = document.createElement('div');
-              t.textContent = 'Modul Selesai';
-              t.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#10B981;color:white;padding:12px 16px;border-radius:8px;font-weight:bold;box-shadow:0 4px 6px rgba(0,0,0,0.1);z-index:1000;';
-              document.body.appendChild(t);
-              setTimeout(()=>t.remove(), 3000);
-            }
-          }, MIN_STAY_MS);
-        }
-      } else {
-        if (bottomTimer) { clearTimeout(bottomTimer); bottomTimer = null; }
-      }
-    }
-    window.addEventListener('scroll', onScroll, { passive: true });
-  })();
-
-  // expose small API for debugging
   return {
     getCurrentLogId: () => currentLogId,
-    start: () => startLearningWrapper(SUB_ID),
+    start: () => startLearningWrapper(SUB_ID_LOCAL),
     end: () => endLearningWrapper()
   };
-})(); // auto IIFE
+})();
 </script>
 
 </body>

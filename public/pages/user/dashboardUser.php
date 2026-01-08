@@ -84,17 +84,42 @@ REQUIRE_ONCE PUBLIC_PATH . '/partials/sidebar.php';
             </div>
             
             <!-- Right button -->
-            <div class="flex-shrink-0">
-                <button 
-                    onclick="exportLaporan(this)" 
-                    class="group w-full sm:w-auto inline-flex items-center justify-center px-6 py-4 bg-white border-2 border-[#2563EB]/30 hover:border-[#2563EB] text-[#2563EB] font-semibold rounded-xl transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-1"
-                >
-                    <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    <span class="text-lg">Export</span>
-                </button>
-            </div>
+            <div class="relative inline-block text-left">
+    <button 
+        onclick="toggleExportDropdown()" 
+        class="group w-full sm:w-auto inline-flex items-center justify-center px-6 py-4 bg-white border-2 border-[#2563EB]/30 hover:border-[#2563EB] text-[#2563EB] font-semibold rounded-xl transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-1"
+    >
+        <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+            </path>
+        </svg>
+        <span class="text-lg mr-2">Export</span>
+        <svg class="w-4 h-4 transition-transform" id="exportChevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+    </button>
+
+    <!-- Dropdown -->
+    <div 
+        id="exportDropdown"
+        class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden"
+    >
+        <button 
+            onclick="exportLaporan('csv', this)" 
+            class="w-full text-left px-4 py-3 hover:bg-gray-100 text-gray-700 font-medium"
+        >
+            Export CSV
+        </button>
+        <button 
+            onclick="exportLaporan('pdf', this)" 
+            class="w-full text-left px-4 py-3 hover:bg-gray-100 text-gray-700 font-medium"
+        >
+            Export PDF
+        </button>
+    </div>
+</div>
+
         </div>
     </div>
 </div>
@@ -305,7 +330,39 @@ REQUIRE_ONCE PUBLIC_PATH . '/partials/sidebar.php';
 </div>
 
 <script>
-function exportLaporan(button) {
+
+function toggleExportDropdown() {
+    const dd = document.getElementById('exportDropdown');
+    const chev = document.getElementById('exportChevron');
+    dd.classList.toggle('hidden');
+    chev.classList.toggle('rotate-180');
+}
+
+function exportLaporan(type) {
+    // tutup dropdown
+    document.getElementById('exportDropdown').classList.add('hidden');
+
+    // kalau kamu pakai filter periode di page
+    const params = new URLSearchParams({
+        type: type
+        // month: selectedMonth,
+        // year: selectedYear
+    });
+
+    window.location.href = `laporan.php?${params.toString()}`;
+}
+
+// klik di luar -> dropdown nutup
+document.addEventListener('click', function (e) {
+    const btn = e.target.closest('button');
+    const wrapper = document.querySelector('.relative.inline-block');
+
+    if (!wrapper.contains(e.target)) {
+        document.getElementById('exportDropdown')?.classList.add('hidden');
+    }
+});
+
+function exportLaporan(type, button) {
     const originalText = button.innerHTML;
     button.disabled = true;
     button.innerHTML = `
@@ -319,8 +376,12 @@ function exportLaporan(button) {
     const start = document.getElementById('start')?.value;
     const end   = document.getElementById('end')?.value;
 
-    let url = '/pages/user/laporanCSV.php';
-    if (start && end) url += `?start=${start}&end=${end}`;
+    // ✅ GANTI ke endpoint download kamu
+    let url = '/pages/user/laporan.php?type=' + encodeURIComponent(type);
+
+    if (start) url += `&start=${encodeURIComponent(start)}`;
+    if (end)   url += `&end=${encodeURIComponent(end)}`;
+
     window.location.href = url;
 
     setTimeout(() => {
@@ -328,6 +389,7 @@ function exportLaporan(button) {
         button.innerHTML = originalText;
     }, 800);
 }
+
 
 // Update waktu real-time
 function updateTime() {

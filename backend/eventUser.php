@@ -1,4 +1,5 @@
 <?php
+//CRUD jadwal belajar user 
 namespace App\Schedule;
 require_once __DIR__ . '/../config/nyambung.php';
 

@@ -1,4 +1,5 @@
 <?php
+//untuk mengirim notifikasi belajar kepada user melalui email
 declare(strict_types=1);
 
 require_once __DIR__ . '/../../config/nyambung.php';

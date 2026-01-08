@@ -1,4 +1,5 @@
 <?php
+//log data pengiriman notifikasi
 namespace App;
 
 require_once __DIR__ . '/../../config/nyambung.php';

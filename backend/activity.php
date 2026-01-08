@@ -1,4 +1,5 @@
 <?php
+//log activity pengguna pada sistem
 namespace App\activity; 
 
 require_once __DIR__.'/../config/nyambung.php'; 

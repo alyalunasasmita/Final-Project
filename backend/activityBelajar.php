@@ -1,4 +1,6 @@
 <?php
+//log activity belajar (sumber dari materi)
+
 namespace App;
 
 require_once __DIR__ . '/../config/nyambung.php';

@@ -1,6 +1,7 @@
 <?php
-namespace App;
+////mengatur segala sesi dan batasan user pada sistem
 
+namespace App;
 class SessionManager {
 
     private int $timeout  = 1800; // 30 menit
@@ -21,7 +22,7 @@ class SessionManager {
             session_start();
         }
 
-        // ⚠️ HANYA cek timeout jika sudah login
+        // HANYA cek timeout jika sudah login
         if (isset($_SESSION["username"])) {
             $this->checkIdleTimeout();
         }

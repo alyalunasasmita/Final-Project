@@ -1,4 +1,5 @@
 <?php
+//CRUD Submateri oleh role Admin
 namespace App\Submateri;
 
 require_once __DIR__ . '/../config/nyambung.php';

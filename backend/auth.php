@@ -1,4 +1,5 @@
 <?php
+//autentikasi (login, registrasi, logout)
 namespace App\auth;
 
 require_once __DIR__.'/../config/nyambung.php'; 

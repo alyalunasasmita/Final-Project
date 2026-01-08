@@ -1,4 +1,5 @@
 <?php
+//PHPMailer atau configurasi STMP
 namespace App\service;
 
 require_once __DIR__ . '/../../vendor/autoload.php';

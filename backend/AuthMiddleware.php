@@ -1,4 +1,5 @@
 <?php
+//mengatur segala sesi dan batasan user pada sistem (endpoint)
 namespace App;
 
 require_once __DIR__ . "/SessionManager.php";

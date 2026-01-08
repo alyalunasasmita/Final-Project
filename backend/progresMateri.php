@@ -1,4 +1,5 @@
 <?php
+//progres materi
 namespace App\progres;
 
 require_once __DIR__.'/../config/nyambung.php'; 
@@ -21,9 +22,7 @@ class ProgressMateri {
         $this->db = $conn->db;
     }
 
-    /**
-     * Tandai submateri sebagai selesai (jika belum)
-     */
+    //tandai submateri jika sudah di akses 
     public function markSubmateriOpened(int $id_sub) {
 
         // cek apakah submateri sudah ada di progress table
@@ -60,9 +59,7 @@ class ProgressMateri {
         }
     }
 
-    /**
-     * Hitung progress satu materi
-     */
+   //tandai selesai materi jika semua submateri sudah di akses pada satu materi
     public function getProgressMateri(int $id_materi): array {
 
         // total submateri dalam materi

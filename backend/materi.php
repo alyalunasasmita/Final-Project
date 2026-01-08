@@ -1,4 +1,5 @@
 <?php
+//CRUD materi pembelajaran oleh admin
 namespace App\Materi;
 
 require_once __DIR__ . '/../config/nyambung.php';

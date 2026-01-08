@@ -1,4 +1,5 @@
 <?php
+//CRUD catatan user 
 namespace App\catat;
 
 require_once __DIR__.'/../config/nyambung.php'; 
