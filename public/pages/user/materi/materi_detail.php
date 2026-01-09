@@ -1,12 +1,14 @@
 <?php
 require_once __DIR__ . '/../../../config.php';
-require_once ROOT_PATH . '/backend/api/ytSearch.php';
+require_once ROOT_PATH . '/backend/API/ytSearch.php';
 require_once ROOT_PATH . '/backend/materi.php';
-require_once ROOT_PATH . '/backend/submateri.php';
+require_once ROOT_PATH . '/backend/subMateri.php';
 require_once ROOT_PATH . '/backend/AuthMiddleware.php';
-require_once ROOT_PATH . '/backend/activitybelajar.php';
+require_once ROOT_PATH . '/backend/activityBelajar.php';
+require_once ROOT_PATH . '/backend/service/quizRepository.php';
 
 
+use app\service\QuizRepository;
 use App\Materi\Materi;
 use App\submateri\Submateri;
 use App\Service\YouTubeSearchService;
@@ -18,14 +20,25 @@ AuthMiddleware::authUser();
 $materiId = (int)($_GET['id'] ?? 0);
 if ($materiId <= 0) die('Invalid materi');
 
-
+$quizRepo = new QuizRepository();
 $materiObj = new Materi();
 $subObj = new Submateri();
 $yt = new YouTubeSearchService();
 $logBljr = new LogBelajar($conn ?? null);
 
+
+
+
+$prog = $logBljr->getProgressMateriSelesaiFromLog((int)$_SESSION['user_id'], (int)$materiId);
+$progressPercent = (int)$prog['persen'];
+
 $materi = $materiObj->getMateriById($materiId)['data'] ?? [];
 $submateri = $subObj->lihatSubmateriByMateri($materiId);
+
+$quizPercent = $quizRepo->getLatestQuizScoreByMateri((int)$_SESSION['user_id'], $materiId);
+
+$quizScore = $quizPercent !== null ? (int)round($quizPercent) : null; // null = belum pernah quiz
+$quizMax = 100;
 
 // rekomendasi video dengan keyword dari nama materi
 $keyword = $materi['nama_materi'] ?? '';
@@ -55,9 +68,10 @@ if (!empty($keyword)) {
         $logBljr->materisudahdibuka($_SESSION['user_id'], $s['id_subMateri']);
 }
 }
+
+
+
 require_once PUBLIC_PATH . '/partials/header.php';
-
-
 ?> 
 
 
@@ -123,6 +137,52 @@ require_once PUBLIC_PATH . '/partials/header.php';
       </p>
     </div>
   </div>
+  
+ <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5 md:p-6 mb-8">
+  <div class="flex items-start gap-4">
+    <!-- Icon Progress (Book) -->
+    <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
+      <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
+      </svg>
+    </div>
+
+    <div class="flex-1">
+      <p class="text-sm text-gray-500 mb-1">Progress Belajar</p>
+      <p class="text-lg font-semibold text-gray-800">
+        Progress Belajar: <?= (int)$progressPercent ?>% selesai
+      </p>
+
+      <!-- Progress Bar -->
+      <div class="mt-3 w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
+        <div
+          class="h-full bg-emerald-500 rounded-full transition-all duration-300"
+          style="width: <?= max(0, min(100, (int)$progressPercent)) ?>%;"
+        ></div>
+      </div>
+
+      <div class="mt-5 flex items-start gap-4">
+        <!-- Icon Quiz (Trophy) -->
+        <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+          <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M6 2a1 1 0 00-1 1v2H4a1 1 0 00-1 1v1a4 4 0 004 4h.1A5.002 5.002 0 009 14.9V16H7a1 1 0 100 2h6a1 1 0 100-2h-2v-1.1A5.002 5.002 0 0012.9 11H13a4 4 0 004-4V6a1 1 0 00-1-1h-1V3a1 1 0 00-1-1H6zm9 5a2 2 0 01-2 2h-.4a4.98 4.98 0 00.4-2V7h2v0zM7 7v0a4.98 4.98 0 00.4 2H7a2 2 0 01-2-2V7h2z"/>
+          </svg>
+        </div>
+
+        <div class="flex-1">
+          <p class="text-sm text-gray-500 mb-1">Nilai Quiz</p>
+          <p class="text-lg font-semibold text-blue-700">
+            <?php if ($quizScore === null): ?>
+              Nilai Quiz: <span class="text-gray-500 font-medium">0 / <?= (int)$quizMax ?> </span>
+            <?php else: ?>
+              Nilai Quiz: <?= (int)$quizScore ?> / <?= (int)$quizMax ?>
+            <?php endif; ?>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
   <!-- Daftar Submateri -->
   <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-8">

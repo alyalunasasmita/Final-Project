@@ -1,6 +1,4 @@
 <?php
-//log activity belajar (sumber dari materi)
-
 namespace App;
 
 require_once __DIR__ . '/../config/nyambung.php';
@@ -107,27 +105,65 @@ class LogBelajar
 
     ///tanda materi selesai dipelajari
     public function materiSelesai(int $user_id, int $materi_id): bool
-    {
-        $sql = "
-            SELECT 
-                COUNT(*) AS total,
-                SUM(CASE WHEN waktu_selesai IS NOT NULL THEN 1 ELSE 0 END) AS selesai
-            FROM log_belajar
-            WHERE users_id = ?
-            AND materi_id = ?
-        ";
+{
+    $sql = "
+        SELECT
+            COUNT(sm.id_subMateri) AS total_sub,
+            COALESCE(SUM(CASE WHEN lb.waktu_selesai IS NOT NULL THEN 1 ELSE 0 END), 0) AS selesai_sub
+        FROM submateri sm
+        LEFT JOIN log_belajar lb
+            ON lb.submateri_id = sm.id_subMateri
+           AND lb.users_id = ?
+           AND lb.materi_id = ?
+        WHERE sm.materi_id_materi = ?
+          AND sm.deleted_at IS NULL
+    ";
 
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ii", $user_id, $materi_id);
-        $stmt->execute();
-        $row = $stmt->get_result()->fetch_assoc();
-        $stmt->close();
-
-        // Belum pernah buka materi
-        if ((int)$row['total'] === 0) {
-            return false;
-        }
-
-        return (int)$row['total'] === (int)$row['selesai'];
+    $stmt = $this->conn->prepare($sql);
+    if (!$stmt) {
+        // ini akan nunjukin error SQL aslinya (penting buat debug)
+        die("PREPARE ERROR: " . $this->conn->error);
     }
+
+    $stmt->bind_param("iii", $user_id, $materi_id, $materi_id);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+
+    if ((int)$row['total_sub'] === 0) return false;
+
+    return (int)$row['total_sub'] === (int)$row['selesai_sub'];
+}
+
+public function getProgressMateriSelesaiFromLog(int $user_id, int $materi_id): array
+{
+    $sql = "
+        SELECT
+            COUNT(sm.id_subMateri) AS total_sub,
+            COUNT(DISTINCT CASE 
+                WHEN lb.waktu_selesai IS NOT NULL THEN sm.id_subMateri 
+            END) AS selesai_sub
+        FROM submateri sm
+        LEFT JOIN log_belajar lb
+            ON lb.submateri_id = sm.id_subMateri
+           AND lb.users_id = ?
+           AND lb.materi_id = ?
+        WHERE sm.materi_id_materi = ?
+          AND sm.deleted_at IS NULL
+    ";
+
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bind_param("iii", $user_id, $materi_id, $materi_id);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+
+    $total   = (int)($row['total_sub'] ?? 0);
+    $selesai = (int)($row['selesai_sub'] ?? 0);
+    $persen  = ($total > 0) ? (int)floor(($selesai / $total) * 100) : 0;
+
+    return ['total' => $total, 'selesai' => $selesai, 'persen' => $persen];
+}
+
+
 }
