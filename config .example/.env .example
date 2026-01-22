@@ -1,0 +1,11 @@
+//API Key Youtube
+YT_API_KEY=
+
+//SMTP email
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=465
+MAIL_USER="your email"
+MAIL_PASS='yourMailPass'
+MAIL_FROM="your email"
+MAIL_FROM_NAME=StudyYou
+MAIL_SECURE=ssl
