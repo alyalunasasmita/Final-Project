@@ -1,8 +1,8 @@
 ## 📸 Screenshots
-![Login Page](screenshots/loginPage.png)
-![Dashboard](screenshots/ userDashboard.png)
-![schedule](screenshots/ userSchedule.png)
-![course](screenshots/ userMateri.png)
+![Login Page](Screenshots/loginPage.png)
+![Dashboard](Screenshots/userDashboard.png)
+![schedule](Screenshots/userSchedule.png)
+![course](Screenshots/userMateri.png)
 
 ## 📄 Project Description
 This project is a web-based application built using PHP Native and MySQL.
